@@ -1,6 +1,6 @@
 :root {
     --red: #ff573e;
-    --orange: #f3a42d;
+    --orange: #ff7700;
     --sidebar-margin-left: 17px;
 }
 
@@ -11,17 +11,15 @@
     height: 100%;
     position: fixed;
     background-color: rgb(225, 225, 225);
-    border-right: 1px solid rgb(160,160,160);
+    border-right: 1px solid rgb(180,180,180);
     user-select: none;
+    transition: width 0.3s ease;
 }
 
 #sidebar.shrunk {
+    transition: width 0.3s ease;
     /* width is expand btn width + exand button margin */
     width: 4.6rem; 
-}
-
-#sidebar.transitioning {
-    transition: width 0.3s ease;
 }
 
 #expandbtn {
@@ -36,6 +34,7 @@
     margin-right: .7rem;
     margin-top: .7rem;
     background-color: rgb(250,250,250);
+    cursor: pointer;
 }
 
 #expandbtn:hover {
@@ -65,6 +64,7 @@
     display: flex;
     flex-direction: column;
     /* align-items: center; */
+    gap: 3px;
 }
 
 #menutag {
@@ -90,6 +90,59 @@
 /* sidebar */
 
 
+/* assignments */
+
+#assignments {
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+}
+
+#assignmentstitle {
+    margin: 0;
+    padding: 0;
+    margin-top: -60px;
+}
+
+#mainblockassignments {
+    background-color: rgb(235, 235, 235);
+    border: 1px solid rgb(160,160,160);
+    border-radius: 5px;
+    width: 50rem;
+    height: 60rem;
+    margin-top: 18vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* assignments */
+
+/* practice */
+
+#practice {
+    
+}
+
+/* practice */
+
+/* profile */
+
+.profileimg {
+    width: 1.3rem;
+    height: 1.3rem;
+    padding-left: .35rem;
+}
+
+.profiletext {
+    padding-left: .45rem;
+}
+
+#profile {
+    
+}
+
+/* profile */
 
 .clear {
     opacity: 0 !important;
@@ -97,4 +150,10 @@
 
 .thin {
     font-weight: 400;
+}
+
+.orange {
+    color: transparent;
+    background-clip: text;
+    background-image: linear-gradient(to left, #ea6d00, #e91f00);
 }

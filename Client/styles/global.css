@@ -1,5 +1,6 @@
 :root {
     --sidebar-second-margin: 10px;
+    --orange-yellow: rgb(219, 153, 78);
 }
 
 body {
@@ -10,19 +11,28 @@ body {
     padding: 0;
     height: 100vh;
     width: 100vw;
+    overflow-x: hidden;
 }
 
 
 /* infobar sections */
 
+.transitioning {
+    transition: margin-left .3s ease;
+}
+
 .section {
-    height: 50px;
-    width: calc(100% - var(--sidebar-margin-left));
+    gap: 4px;
+    height: 40px;
+    width: calc(100% - var(--sidebar-margin-left)*2);
     display: flex;
     align-items: center;
     margin-left: var(--sidebar-margin-left);
+    border-radius: 10px;
+    transition: background-color .2s ease-out;
     /* justify-content: center; */
     /* background-color: red; */
+    cursor: pointer;
 }
 
 .sectiontext {
@@ -36,4 +46,36 @@ body {
     margin-left: var(--sidebar-second-margin);
 }
 
+.section:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.clicked {
+    background-color: rgb(245, 245, 245);
+}
+
+.hiddensection {
+    display: none !important;
+} /* hidden setion class */
+
 /* infobar sections */
+
+/* main container */
+
+#main {
+    width: 85vw;
+    height: 100%;
+    margin-left: 15rem;
+}
+
+#main.shrunk {
+    margin-left: 4.6rem;
+}
+
+.fullsection {
+    width: 100%;
+    height: 100%;
+    transition: opacity .1s ease-out;
+}
+
+/* main container */

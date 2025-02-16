@@ -10,20 +10,40 @@
     <body>
         <div id="sidebar">
             <h1 id="name">
-                Strum<span class="thin">Pilot</span>
+                <span class="orange">Strum</span><span class="thin">Pilot</span>
+                <!-- <span >Strum</span><span class="thin">Pilot</span> -->
             </h1>
             <div id="expandbtn">
                 <img id="book" src="/Client/imgs/noteorange.png"></img>
             </div>
             <p id="menutag">MENU</p>
             <div id="infobar">
-                <div class="section">
+                <div class="section clicked" id="assignmentsbtn">
                     <img class="sectionimg" src="/Client/imgs/assignments.png"/>
                     <p class="sectiontext">Assignments</p>
                 </div>
+                <div class="section" id="practicebtn">
+                    <img class="sectionimg" src="/Client/imgs/scope.png"/>
+                    <p class="sectiontext">Practice<p>
+                </div>
+                <div class="section" id="profilebtn">
+                    <img class="sectionimg profileimg" src="/Client/imgs/head.png"/>
+                    <p class="sectiontext profiletext">Profile<p>
+                </div>
             </div>
         </div>
-        <div id="main"></div>
+        <div id="main">
+            <div class="fullsection" id="assignments">
+                <div id="mainblockassignments">
+                    <h1 id="assignmentstitle">
+                        Assignments
+                    </h1>
+                </div>
+                
+            </div>
+            <div class="hiddensection fullsection" id="practice"></div>
+            <div class="hiddensection fullsection" id="profile"></div>
+        </div>
     </body>
 
     <script src="/Client/scripts/home.js"></script>
