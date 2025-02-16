@@ -5,6 +5,8 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/Client/styles/global.css"></link>
         <link rel="stylesheet" href="/Client/styles/home.css"></link>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
     </head>
 
     <body>
@@ -18,7 +20,7 @@
             </div>
             <p id="menutag">MENU</p>
             <div id="infobar">
-                <div class="section clicked" id="assignmentsbtn">
+                <div class="section" id="assignmentsbtn">
                     <img class="sectionimg" src="/Client/imgs/assignments.png"/>
                     <p class="sectiontext">Assignments</p>
                 </div>
@@ -33,16 +35,46 @@
             </div>
         </div>
         <div id="main">
-            <div class="fullsection" id="assignments">
+            <div class="hiddensection fullsection" id="assignments">
                 <div id="mainblockassignments">
                     <h1 id="assignmentstitle">
                         Assignments
                     </h1>
+                    <div id="assignmentsdata">
+                        <div class="assignment">
+                            <div class="due">
+                                <p class="duetext">DUE</p>
+                                <div class="date">FEB 18</div>
+                            </div>
+                            <div class="info">
+                                <text class="heading">Mozart 132</text>
+                                <text class="infotext">View notes within assignment</text>
+                            </div>
+                        </div>
+                        <div class="assignment">
+                            <div class="due">
+                                <p class="duetext">DUE</p>
+                                <div class="date">FEB 26</div>
+                            </div>
+                            <div class="info"></div>
+                        </div>
+                        <div class="assignment">
+                            <div class="due">
+                                <p class="duetext">DUE</p>
+                                <div class="date">MAR 31</div>
+                            </div>
+                            <div class="info"></div>
+                        </div>
+                    </div>
                 </div>
-                
             </div>
             <div class="hiddensection fullsection" id="practice"></div>
             <div class="hiddensection fullsection" id="profile"></div>
+            <div class="fullsection" id="assignment">
+                <canvas id="pdfviewer">
+
+                </canvas>
+            </div>
         </div>
     </body>
 
