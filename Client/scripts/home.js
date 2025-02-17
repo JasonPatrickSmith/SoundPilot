@@ -1,5 +1,26 @@
 const student_id = 1;
 
+const num_to_date = {
+    "01" : "JAN",
+    "02" : "FEB",
+    "03" : "MAR",
+    "04" : "APR",
+    "05" : "MAY",
+    "06" : "JUN",
+    "07" : "JUL",
+    "08" : "AUG",
+    "09" : "SEB",
+    "10" : "OCT",
+    "11" : "NOV",
+    "12" : "DEC",
+}
+
+function TranslateDate(d) {
+    const month = d.slice(5,7)
+    const day = d.slice(8,10)
+    return num_to_date[month] + " " + day.replace(/^0+/, '')
+}
+
 // SIDEBAR
 
 function endTransition(e) {
@@ -68,69 +89,20 @@ function removeIfNew(e, remove) { // e = element, remove = classname
 
 //ASSIGNMENTS
 
+function deleteAllAssignments() {
+    const assignments = document.getElementsByClassName("assignment")
+    for (let i = 0; i < assignments.length; i++) {
+        if (assignments[i].id != "initial") {
+            assignments[i].remove()
+        }
+    }
+}
+
 const noassignments = document.getElementsByClassName('noassignments')[0]
 const initialassignment = document.getElementById("initial")
 
 for (let i = 0; i < sections.length; i++) {
     sections[i].addEventListener("click", (e) => {
-
-        if (sections[i].id == "assignmentsbtn") {
-            fetch(`http://localhost:3000/assignments?id=${student_id}`).then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            }).then(data => {
-                // for (let j = 0; j < data.length; j++) {
-                //     console.log(data[j])
-                // }
-
-                assignmentelements = []
-
-                if (data.length > 0) {
-
-
-                    addIfNew(noassignments, "hiddensection")
-                    removeIfNew(initialassignment, 'hiddensection')
-                    for (let j = 0; j < data.length; j++) {
-
-                        current = initialassignment
-
-                        if (j != 0) {
-                            let newassignment = initialassignment.cloneNode(true)
-                            current.after(newassignment)
-                            current = newassignment
-                        }
-                        
-                        assignmentelements.push(current)
-
-                    }
-                }
-                else {
-                    noassignments.classList.remove("hiddensection")
-                    addIfNew(initialassignment, 'hiddensection')
-                }
-
-                return assignmentelements;
-            }).then(assignmentbuttons => {
-                    
-                const assignmentPage = document.getElementById("assignment")
-
-                for (let i = 0; i < assignmentbuttons.length; i++) {
-                    assignmentbuttons[i].addEventListener("click", (e) => {
-        
-
-                    assignmentPage.classList.remove("hiddensection")
-
-                    lastpairedsection.classList.add("hiddensection")
-                    sections[currentsection].classList.remove("clicked")
-
-                    currentsection = -1;
-                    lastpairedsection = assignmentPage
-                })
-}
-            })
-        }
 
         if (i != currentsection) {
 
@@ -149,6 +121,84 @@ for (let i = 0; i < sections.length; i++) {
             
             currentsection = i
             lastpairedsection = pairedsection
+        }
+        
+        if (sections[i].id == "assignmentsbtn") {
+
+
+            deleteAllAssignments()
+
+            fetch(`http://localhost:3000/assignments?id=${student_id}`).then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            }).then(data => {
+                assignmentelements = []
+
+                if (data.length > 0) {
+
+
+                    addIfNew(noassignments, "hiddensection")
+                    removeIfNew(initialassignment, 'hiddensection')
+                    for (let j = 0; j < data.length; j++) { // looping through every JSON assignment
+
+                        current = initialassignment
+
+                        if (j != 0) {
+                            let newassignment = initialassignment.cloneNode(true) // cloning assignment buttons
+                            current.after(newassignment)
+                            current = newassignment
+                            current.removeAttribute("id")
+                            current.dataset.listener = '0'
+                        }
+
+                        // assignment button styling
+                        
+                        const datee = current.querySelector('.date')
+                        datee.textContent = TranslateDate(data[j].due_date)
+
+                        const headinge = current.querySelector(".heading")
+                        headinge.textContent = data[j].title
+
+                        const infotext = current.querySelector(".infotext")
+                        infotext.textContent = data[j].short_desc
+
+                        // assignment button styling
+
+                        current.dataset.assignment_type = data[j].type
+
+                        assignmentelements.push(current)
+                    }
+                }
+                else {
+                    noassignments.classList.remove("hiddensection")
+                    addIfNew(initialassignment, 'hiddensection')
+                }
+
+                return assignmentelements;
+            }).then(assignmentbuttons => {
+                    
+                const assignmentPage = document.getElementById("assignment")
+
+                for (let i = 0; i < assignmentbuttons.length; i++) {
+                    if (assignmentbuttons[i].dataset.listener == '0') {
+                        assignmentbuttons[i].addEventListener("click", (e) => {
+
+                            if (assignmentbuttons[i].dataset.assignment_type == "attachment") {
+                                assignmentPage.classList.remove("hiddensection")
+    
+                                lastpairedsection.classList.add("hiddensection")
+                                sections[currentsection].classList.remove("clicked")
+    
+                                currentsection = -1
+                                lastpairedsection = assignmentPage
+                            }
+                        })
+                        assignmentbuttons[i].dataset.listener = '1'
+                    }
+                }
+            })
         }
     })
 }
