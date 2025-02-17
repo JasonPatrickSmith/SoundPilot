@@ -1,3 +1,5 @@
+const student_id = 1;
+
 // SIDEBAR
 
 function endTransition(e) {
@@ -52,9 +54,83 @@ expandbtn.addEventListener("click", (e) => {
 
 //section buttons
 
+function addIfNew(e, add) { // e = element, add = classname
+    if (!e.classList.contains(add)) {
+        e.classList.add(add)
+    }
+}
+
+function removeIfNew(e, remove) { // e = element, remove = classname
+    if (e.classList.contains(remove)) {
+        e.classList.remove(remove)
+    }
+}
+
+//ASSIGNMENTS
+
+const noassignments = document.getElementsByClassName('noassignments')[0]
+const initialassignment = document.getElementById("initial")
 
 for (let i = 0; i < sections.length; i++) {
     sections[i].addEventListener("click", (e) => {
+
+        if (sections[i].id == "assignmentsbtn") {
+            fetch(`http://localhost:3000/assignments?id=${student_id}`).then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            }).then(data => {
+                // for (let j = 0; j < data.length; j++) {
+                //     console.log(data[j])
+                // }
+
+                assignmentelements = []
+
+                if (data.length > 0) {
+
+
+                    addIfNew(noassignments, "hiddensection")
+                    removeIfNew(initialassignment, 'hiddensection')
+                    for (let j = 0; j < data.length; j++) {
+
+                        current = initialassignment
+
+                        if (j != 0) {
+                            let newassignment = initialassignment.cloneNode(true)
+                            current.after(newassignment)
+                            current = newassignment
+                        }
+                        
+                        assignmentelements.push(current)
+
+                    }
+                }
+                else {
+                    noassignments.classList.remove("hiddensection")
+                    addIfNew(initialassignment, 'hiddensection')
+                }
+
+                return assignmentelements;
+            }).then(assignmentbuttons => {
+                    
+                const assignmentPage = document.getElementById("assignment")
+
+                for (let i = 0; i < assignmentbuttons.length; i++) {
+                    assignmentbuttons[i].addEventListener("click", (e) => {
+        
+
+                    assignmentPage.classList.remove("hiddensection")
+
+                    lastpairedsection.classList.add("hiddensection")
+                    sections[currentsection].classList.remove("clicked")
+
+                    currentsection = -1;
+                    lastpairedsection = assignmentPage
+                })
+}
+            })
+        }
 
         if (i != currentsection) {
 
@@ -81,22 +157,6 @@ for (let i = 0; i < sections.length; i++) {
 
 // Assignment icons
 
-const assignmentPage = document.getElementById("assignment")
-const assignmentbuttons = document.getElementsByClassName("assignment")
-
-for (let i = 0; i < assignmentbuttons.length; i++) {
-    assignmentbuttons[i].addEventListener("click", (e) => {
-        
-
-        assignmentPage.classList.remove("hiddensection")
-
-        lastpairedsection.classList.add("hiddensection")
-        sections[currentsection].classList.remove("clicked")
-
-        currentsection = -1;
-        lastpairedsection = assignmentPage
-    })
-}
 
 //PDF LOADING
 
