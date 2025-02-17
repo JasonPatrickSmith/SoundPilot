@@ -28,6 +28,7 @@ const sections = document.getElementsByClassName("section") // all sections
 let currentsection = -1; // initial button
 let lastpairedsection = null; // initial section
 
+
 expandbtn.addEventListener("click", (e) => {
     sidebar.classList.toggle("shrunk");
 
@@ -63,8 +64,11 @@ for (let i = 0; i < sections.length; i++) {
             pairedsection.classList.remove("hiddensection")
             
             if (currentsection != -1) {
-                lastpairedsection.classList.add("hiddensection")
+                
                 sections[currentsection].classList.remove("clicked")
+            }
+            if (lastpairedsection != null) {
+                lastpairedsection.classList.add("hiddensection")
             }
             
             currentsection = i
@@ -75,8 +79,53 @@ for (let i = 0; i < sections.length; i++) {
 
 // SIDEBAR
 
+// Assignment icons
+
+const assignmentPage = document.getElementById("assignment")
+const assignmentbuttons = document.getElementsByClassName("assignment")
+
+for (let i = 0; i < assignmentbuttons.length; i++) {
+    assignmentbuttons[i].addEventListener("click", (e) => {
+        
+
+        assignmentPage.classList.remove("hiddensection")
+
+        lastpairedsection.classList.add("hiddensection")
+        sections[currentsection].classList.remove("clicked")
+
+        currentsection = -1;
+        lastpairedsection = assignmentPage
+    })
+}
+
 //PDF LOADING
 
 pdfjsLib.getDocument("/Client/pdfs/You'll Be Back - Hamilton TABS.pdf").promise.then(pdf => {
     console.log("PDF Loaded!")
-})
+
+    return pdf.getPage(1);
+}).then(page => {
+    const canvas = document.getElementById("pdfviewer");
+    const ctx = canvas.getContext("2d");
+
+    const scale = 2
+    const viewport = page.getViewport({ scale })
+
+    const multiplier = 4
+
+    canvas.width = viewport.width
+    canvas.height = viewport.height
+    // canvas.style.width = `${viewport.width/multiplier}px`
+    // canvas.style.height = `${viewport.height/multiplier}px`
+    canvas.style.width = `${viewport.width/3.5}px`
+    canvas.style.height = `${viewport.height/3.5}px`
+    // canvas.style.width = `4[x]`
+
+    const renderContext = {
+        canvasContext: ctx,
+        viewport: viewport
+    };
+    page.render(renderContext);
+}).catch(error => {
+    console.error("Error loading PDF:", error);
+});

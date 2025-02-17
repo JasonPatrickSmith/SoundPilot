@@ -219,7 +219,24 @@
 #assignment {
     width: 100%;
     height: 100%;
-    background-color: blue;
+}
+
+#pdf {
+    width: 27vw;
+    height: 85vh;
+}
+
+#assignmentbulk {
+    margin-left: 15vw;
+    width: 70rem;
+    height: 60rem;
+    background-color: red;
+    padding-top: 10vh;
+}
+
+#pdfviewer {
+    border: .5px solid rgb(120,120,120);
+    border-radius: 3px;
 }
 
 /* assignment page */
