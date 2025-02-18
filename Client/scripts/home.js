@@ -27,8 +27,6 @@ function endTransition(e) {
     e.classList.remove("transitioning")
 }
 
-
-
 const expandbtn = document.getElementById("expandbtn");
 const sidebar = document.getElementById("sidebar");
 
@@ -62,7 +60,7 @@ expandbtn.addEventListener("click", (e) => {
         setTimeout(() => {
             main.classList.toggle("shrunk"); //shrinking elements
             if (!main.classList.contains("shrunk")) { // main div is shrinking
-                lastpairedsection.style.width = "85vw";
+                lastpairedsection.style.width = "87vw";
             }
             else {
                 lastpairedsection.style.width = "95.6vw"
@@ -104,6 +102,57 @@ function deleteAllAssignments() {
 const noassignments = document.getElementsByClassName('noassignments')[0]
 const initialassignment = document.getElementById("initial")
 
+let assignmentPage = document.getElementById("assignment")
+let desc = document.getElementsByClassName("textdesc")[0]
+let desctitle = document.getElementsByClassName("desctitle")[0]
+let duedesc = document.getElementsByClassName("duedesc")[0]
+let submissions = document.getElementsByClassName("submissions")[0]
+
+let submissionCard = document.getElementById("initialsubmission")
+let assignmentCard = document.getElementById("initialassignment")
+let assignmentCardTitle = assignmentCard.querySelector(".submissiontitle");
+let assignmentCardSubmissionDate = assignmentCard.querySelector(".submissiondate");
+
+function deleteSubmissionCards() {
+    let submissionCards = document.getElementsByClassName("card")
+    const staticlength = submissionCards.length
+    let removed = 0
+
+    for (let n = 0; n < staticlength; n++) {
+
+        i = n - removed
+
+        if (submissionCards[i].id != "initialsubmission" && submissionCards[i].id != "initialassignment") {
+            submissionCards[i].remove()
+            removed++
+        }
+    }
+}
+
+function updateSubmission(assignment_id) {
+
+    deleteSubmissionCards() // clearing all extra submission cards except initial
+
+    fetch(`http://localhost:3000/submissions?id=${assignment_id}`).then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
+    }).then(data => {
+        for (let i = 0; i < data.length; i++) {
+
+            let newCard = submissionCard.cloneNode(true) // cloning card
+            newCard.classList.remove("hiddensection") // revealing card
+            newCard.removeAttribute("id")
+
+            const submissiondate = TranslateDate(data[i].submitted_at)
+            newCard.querySelector(".submissiondate").textContent = `Submitted on ${submissiondate}` // changing due date
+
+            submissionCard.after(newCard)
+        }
+    })
+}
+
 for (let i = 0; i < sections.length; i++) {
     sections[i].addEventListener("click", (e) => {
 
@@ -138,11 +187,7 @@ for (let i = 0; i < sections.length; i++) {
                 return res.json();
             }).then(data => {
 
-                let assignmentPage = document.getElementById("assignment")
-                let desc = document.getElementsByClassName("textdesc")[0]
-                let desctitle = document.getElementsByClassName("desctitle")[0]
-                let duedesc = document.getElementsByClassName("duedesc")[0]
-                let submissions = document.getElementsByClassName("submissions")[0]
+               
 
                 if (data.length > 0) {
 
@@ -189,9 +234,23 @@ for (let i = 0; i < sections.length; i++) {
                                     lastpairedsection.classList.add("hiddensection")
                                     sections[currentsection].classList.remove("clicked")
 
-                                    desc.innerHTML = details.description
+                                    //storing assignment id
+                                    assignmentPage.dataset.id = data[j].id
+
+
+                                    // personalized description
+                                    desc.innerHTML = details.description 
                                     desctitle.innerHTML = data[j].title
                                     duedesc.innerHTML = "This Assignment is Due " + TranslateDate(data[j].due_date, false)
+
+                                    //personalized assignment card
+                                    assignmentCardTitle.textContent = data[j].title
+                                    assignmentCardSubmissionDate.textContent = `Assigned on ${TranslateDate(data[j].created_at, false)}`
+
+
+                                    //personalized submissions
+                                    updateSubmission(data[j].id)
+
     
                                     currentsection = -1
                                     lastpairedsection = assignmentPage
@@ -294,23 +353,38 @@ zone.addEventListener('dragleave', (e) => {
 
 zone.addEventListener('drop', (e) => {
     const file = e.dataTransfer.files[0];
-    console.log(file)
+    
+    console.log(file.type)
+    e.preventDefault()
+
+    if (file.type == "application/pdf" || file.type == "video/mp4") {
+
+        const form = new FormData();
+
+        form.append("file", file)
+        form.append("assignment_id", assignmentPage.dataset.id)
+        form.append("submission_type", file.type)
+
+        
+        try {
+            e.preventDefault()
+            fetch("http://localhost:3000/submission", {
+                method: "POST",
+                body: form,
+            }).then(response => response.json())
+            .then(data => {
+                console.log("File uploaded successfully:", data);
+                return data
+            }).then(stuff => { // updatingsubmissions
+                updateSubmission(assignmentPage.dataset.id)
+            }) 
+        } catch(error) {
+            console.error("Error uploading file:", error);
+        };
+    
+    }
     
     draggedover = false
 
-    const form = new FormData();
-    form.append("file", file)
-    e.preventDefault()
-    try {
-        e.preventDefault()
-        fetch("http://localhost:3000/submission", {
-            method: "POST",
-            body: form,
-        }).then(response => response.json())
-        .then(data => {
-            console.log("File uploaded successfully:", data);
-        })
-    } catch(error) {
-        console.error("Error uploading file:", error);
-    };
+    
 })

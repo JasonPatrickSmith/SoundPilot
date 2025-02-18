@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/Client/styles/global.css"></link>
         <link rel="stylesheet" href="/Client/styles/home.css"></link>
+        <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
     </head>
 
     <body>
@@ -61,14 +61,25 @@
             </div>
             <div class="hiddensection fullsection" id="practice"></div>
             <div class="hiddensection fullsection" id="profile"></div>
-            <div class="hiddensection fullsection" id="assignment">
+            <div class="hiddensection fullsection" id="assignment" data-id="">
                 <div id="assignmentbulk">
                     <a href="/Client/pdfs/You'll Be Back - Hamilton TABS.pdf" download="Assignment"><canvas id="pdfviewer"></canvas></a>
+                    <div class="hiddensection videocontainer"><video
+                        id="my-video"
+                        class="video-js"
+                        controls
+                        preload="auto"
+                        width="405"
+                        height="720"
+                        data-setup="{}"
+                        
+                    >
+                    <source  src="/Server/uploads/1739900843845.mp4" type="video/mp4" /></div>
+                    
                     <div id="infocontainer">
                         <div id="scrollbarborder">
                             <img id="downloadingimg" src="/Client/imgs/download.png"/>
                             <div id="submissions">
-                                
                                 <div class="card" id="initialassignment">
                                     <div class="cardcontent">
                                         <div class="title">
@@ -83,49 +94,7 @@
                                         </div>
                                     </div> 
                                 </div>
-                                <div class="card" id="initialsubmission">
-                                    <div class="cardcontent">
-                                        <div class="title">
-                                            <div class="color"></div>
-                                            <p class="text">Submission</p>
-                                        </div>
-                                        <div class="submissiontitle">
-                                            Video.mp4
-                                        </div>
-                                        <div class="submissiondate">
-                                            Submitted on Feb 14
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card" id="initialsubmission">
-                                    <div class="cardcontent">
-                                        <div class="title">
-                                            <div class="color"></div>
-                                            <p class="text">Submission</p>
-                                        </div>
-                                        <div class="submissiontitle">
-                                            Video.mp4
-                                        </div>
-                                        <div class="submissiondate">
-                                            Submitted on Feb 14
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card" id="initialsubmission">
-                                    <div class="cardcontent">
-                                        <div class="title">
-                                            <div class="color"></div>
-                                            <p class="text">Submission</p>
-                                        </div>
-                                        <div class="submissiontitle">
-                                            Video.mp4
-                                        </div>
-                                        <div class="submissiondate">
-                                            Submitted on Feb 14
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card" id="initialsubmission">
+                                <div class="card hiddensection" id="initialsubmission">
                                     <div class="cardcontent">
                                         <div class="title">
                                             <div class="color"></div>
@@ -156,4 +125,6 @@
     </body>
 
     <script src="/Client/scripts/home.js"></script>
+    <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+    
 </html>

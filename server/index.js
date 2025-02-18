@@ -7,6 +7,8 @@ const multer = require("multer");
 const path = require("path");
 const { receiveMessageOnPort } = require("worker_threads");
 
+const defaultstudent = 1
+
 
 app.use(cors())
 
@@ -42,18 +44,6 @@ app.get('/assignments', (req, res) => {
     // res.json({message: recieved.toString()});
 })
 
-app.get('/assignments/details', (req, res) => {
-    const recieved = req.query.id
-    connection.query(`SELECT * FROM assignments WHERE student_id = ${recieved}`, (err, results) => {
-        if (err) {
-            console.error('Error executing query: ' + err.stack)
-            res.status(500).send('Error fetching assignments')
-            return;
-        }
-        res.json(results)
-    })
-})
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "uploads/"); // The folder where files will be stored
@@ -65,9 +55,52 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+app.get('/video', (req, res) => {
+    
+})
+
+app.get('/submissions', (req, res) => {
+    const recieved = req.query.id
+    connection.query(`SELECT * FROM submissions WHERE assignment_id = ${recieved}`, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error fetching assignments')
+            return;
+        }
+        res.json(results)
+    })
+    // res.json({message: recieved.toString()});
+})
+
 app.post("/submission", upload.single("file"),(req, res) => {
-    if (!req.file) {
-        return res.status(400).send("No file uploaded.");
-    }
-    res.send({ message: "File uploaded successfully", file: req.file });
+    // if (!req.file) {
+    //     return res.status(400).send("No file uploaded.");
+    // }
+    // res.send({ message: "File uploaded successfully", file: req.file });
+    const file = req.file
+    
+    const submission_data = JSON.stringify({
+        "file" : req.file.path,
+        "type" : req.body.submission_type
+    });
+
+    const values = [
+        req.body.assignment_id,
+        defaultstudent,
+        submission_data
+    ]
+
+    const query = `
+    INSERT INTO submissions (assignment_id, student_id, submission_data, submitted_at, feedback)
+    VALUES (?, ?, ?, NOW(), "feedback");
+    `
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error fetching assignments')
+            return;
+        }
+        res.json(results)
+    })
 })

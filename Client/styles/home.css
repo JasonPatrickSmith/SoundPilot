@@ -425,6 +425,28 @@
 
 /* assignment cards */
 
+/* videos */
+
+.videocontainer {
+    height: 720px;
+    width: auto;
+    overflow: hidden;
+    border-radius: 5px;
+    border: .5px solid rgb(80,80,80);
+    /* transition: border .3s ease-out; */
+}
+
+/* .videocontainer:hover {
+    border: .5px solid white;
+    transition: border .3s;
+} */
+
+.video-js {
+    border: none !important;
+}
+
+/* videos */
+
 /* assignment page */
 
 .clear {
