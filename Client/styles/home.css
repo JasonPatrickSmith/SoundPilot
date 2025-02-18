@@ -241,7 +241,7 @@
 
     width: 80rem;
     height: 60rem;
-    margin-top: 15rem;
+    margin-top: 5rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -360,6 +360,10 @@
 
 .card:hover {
     border: 1px solid black;
+}
+
+.solidborder {
+    border: 1px solid black !important;
 }
 
 .card .title {

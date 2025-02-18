@@ -1,5 +1,7 @@
 const student_id = 1;
 
+var CurrentAssignmentInfo = {}
+
 const num_to_date = {
     "01" : "JAN",
     "02" : "FEB",
@@ -99,6 +101,79 @@ function deleteAllAssignments() {
     }
 }
 
+var player = videojs('my-video')
+let videoviewere = document.getElementById("my-video")
+let videocontainer = document.querySelector(".videocontainer")
+var pdfViewer = document.getElementById("pdfviewer");
+
+function DisplayAttachment(p) { // p = path
+
+    if (p.slice(-3) == "mp4") { // file is video
+
+        if (videocontainer.classList.contains("hiddensection")) { // making video visible
+            videocontainer.classList.remove("hiddensection")
+        }
+
+        if (!pdfViewer.classList.contains("hiddensection")) { // hiding pdf viewer
+            pdfViewer.classList.add("hiddensection")
+        }
+
+        player.src({type: "video/mp4", src: p})
+    }
+    else if (p.slice(-3) == "pdf") { // file is pdf
+        if (!videocontainer.classList.contains("hiddensection")) { // hiding video
+            videocontainer.classList.add("hiddensection")
+        }
+
+        if (pdfViewer.classList.contains("hiddensection")) { // making pdf viewer visible
+            pdfViewer.classList.remove("hiddensection")
+        }
+
+        pdfjsLib.getDocument("/Client/pdfs/You'll Be Back - Hamilton TABS.pdf").promise.then(pdf => {
+            console.log("PDF Loaded!")
+        
+            return pdf.getPage(1);
+        }).then(page => {
+            var canvas = pdfViewer
+            const ctx = canvas.getContext("2d");
+        
+            const scale = 2.15
+            const viewport = page.getViewport({ scale })
+        
+            const multiplier = 4
+        
+            canvas.width = viewport.width
+            canvas.height = viewport.height
+            // canvas.style.width = `${viewport.width/multiplier}px`
+            // canvas.style.height = `${viewport.height/multiplier}px`
+            canvas.style.width = `${viewport.width/3.5}px`
+            canvas.style.height = `${viewport.height/3.5}px`
+            // canvas.style.width = `4[x]`
+        
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        
+            window.addEventListener('resize', (e) => {
+                const renderContext2 = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+        
+                page.render({
+                    canvasContext: ctx,
+                    viewport: page.getViewport({ scale })
+                });
+            })
+        
+        }).catch(error => {
+            console.error("Error loading PDF:", error);
+        });
+    }
+}
+
 const noassignments = document.getElementsByClassName('noassignments')[0]
 const initialassignment = document.getElementById("initial")
 
@@ -129,6 +204,16 @@ function deleteSubmissionCards() {
     }
 }
 
+function clearCardBorders() {
+    let submissionCards = document.getElementsByClassName("card")
+    for (let i = 0; i < submissionCards.length; i++) {
+        if (submissionCards[i].classList.contains("solidborder")) {
+            submissionCards[i].classList.remove("solidborder")
+            submissionCards[i].dataset.clicked = 0
+        }
+    }
+}
+
 function updateSubmission(assignment_id) {
 
     deleteSubmissionCards() // clearing all extra submission cards except initial
@@ -145,12 +230,44 @@ function updateSubmission(assignment_id) {
             newCard.classList.remove("hiddensection") // revealing card
             newCard.removeAttribute("id")
 
+            newCard.dataset.id = data[i].id
+
             const submissiondate = TranslateDate(data[i].submitted_at)
             newCard.querySelector(".submissiondate").textContent = `Submitted on ${submissiondate}` // changing due date
 
             submissionCard.after(newCard)
+
+            newCard.addEventListener("click", (e) => {
+                
+                if (newCard.dataset.clicked == 0) {
+
+                    clearCardBorders() // clearing all borders
+                    newCard.classList.add("solidborder") //setting border for clicked card\
+
+                    DisplayAttachment("/Server/" + data[i].submission_data.file) // displaying card attachment/media
+
+                    newCard.dataset.clicked = 1
+                }
+                
+                //changing desc
+                desc.innerHTML = data[i].feedback
+                desctitle.innerHTML = "Video"
+                duedesc.innerHTML = `This Assignment Was Submitted on ${TranslateDate(data[i].submitted_at)}`
+                
+            }) // click event listeners
         }
     })
+}
+
+function SetAssignmentPage(data, j) {
+    const details = data[j].details // details included in JSON
+
+    // personalized description
+    desc.innerHTML = details.description
+    desctitle.innerHTML = data[j].title
+    duedesc.innerHTML = "This Assignment is Due " + TranslateDate(data[j].due_date, false)
+
+    DisplayAttachment("/Server/" + details.attachment)
 }
 
 for (let i = 0; i < sections.length; i++) {
@@ -186,9 +303,6 @@ for (let i = 0; i < sections.length; i++) {
                 }
                 return res.json();
             }).then(data => {
-
-               
-
                 if (data.length > 0) {
 
 
@@ -196,8 +310,9 @@ for (let i = 0; i < sections.length; i++) {
                     removeIfNew(initialassignment, 'hiddensection')
                     for (let j = 0; j < data.length; j++) { // looping through every JSON assignment
 
-                        const details = data[j].details // details included in JSON
+                        
 
+                        
                         current = initialassignment
 
                         if (j != 0) {
@@ -229,31 +344,35 @@ for (let i = 0; i < sections.length; i++) {
                         if (current.dataset.listener == '0') { 
                             current.addEventListener("click", (e) => {
                                 if (current.dataset.assignment_type=="attachment") {
-                                    assignmentPage.classList.remove("hiddensection")
+
+                                    // Add initial card border
+                                    clearCardBorders()
+                                    if (!(assignmentCard.classList.contains("solidborder"))) { 
+                                        assignmentCard.classList.add("solidborder")
+                                    }
+                                    assignmentCard.dataset.clicked = 1
+
+                                    SetAssignmentPage(data, j)
 
                                     lastpairedsection.classList.add("hiddensection")
                                     sections[currentsection].classList.remove("clicked")
-
-                                    //storing assignment id
-                                    assignmentPage.dataset.id = data[j].id
-
-
-                                    // personalized description
-                                    desc.innerHTML = details.description 
-                                    desctitle.innerHTML = data[j].title
-                                    duedesc.innerHTML = "This Assignment is Due " + TranslateDate(data[j].due_date, false)
 
                                     //personalized assignment card
                                     assignmentCardTitle.textContent = data[j].title
                                     assignmentCardSubmissionDate.textContent = `Assigned on ${TranslateDate(data[j].created_at, false)}`
 
-
                                     //personalized submissions
                                     updateSubmission(data[j].id)
 
-    
+                                    //storing assignment id
+                                    assignmentPage.dataset.id = data[j].id
+
+                                    assignmentPage.classList.remove("hiddensection")
+
                                     currentsection = -1
                                     lastpairedsection = assignmentPage
+
+                                    CurrentAssignmentInfo = [data[j]]
                                 }
                             })
                         }
@@ -272,51 +391,6 @@ for (let i = 0; i < sections.length; i++) {
 }
 
 // SIDEBAR
-
-//PDF LOADING
-
-pdfjsLib.getDocument("/Client/pdfs/You'll Be Back - Hamilton TABS.pdf").promise.then(pdf => {
-    console.log("PDF Loaded!")
-
-    return pdf.getPage(1);
-}).then(page => {
-    const canvas = document.getElementById("pdfviewer");
-    const ctx = canvas.getContext("2d");
-
-    const scale = 2.15
-    const viewport = page.getViewport({ scale })
-
-    const multiplier = 4
-
-    canvas.width = viewport.width
-    canvas.height = viewport.height
-    // canvas.style.width = `${viewport.width/multiplier}px`
-    // canvas.style.height = `${viewport.height/multiplier}px`
-    canvas.style.width = `${viewport.width/3.5}px`
-    canvas.style.height = `${viewport.height/3.5}px`
-    // canvas.style.width = `4[x]`
-
-    const renderContext = {
-        canvasContext: ctx,
-        viewport: viewport
-    };
-    page.render(renderContext);
-
-    window.addEventListener('resize', (e) => {
-        const renderContext2 = {
-            canvasContext: ctx,
-            viewport: viewport
-        };
-
-        page.render({
-            canvasContext: ctx,
-            viewport: page.getViewport({ scale })
-        });
-    })
-
-}).catch(error => {
-    console.error("Error loading PDF:", error);
-});
 
 // SUBMISSION DROPPING
 
@@ -388,3 +462,26 @@ zone.addEventListener('drop', (e) => {
 
     
 })
+
+assignmentCard.addEventListener("click", (e) => {
+    if (assignmentCard.dataset.clicked == 0) {
+        clearCardBorders()
+
+        SetAssignmentPage(CurrentAssignmentInfo, 0)
+        assignmentCard.dataset.clicked = 1
+
+        if (!(assignmentCard.classList.contains("solidborder"))) { 
+            assignmentCard.classList.add("solidborder")
+        }
+    }
+
+    
+    
+})
+
+function checker() {
+    console.log(currentsection)
+    setTimeout(checker, 50)
+}
+
+// checker()

@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="/Client/styles/home.css"></link>
         <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
     </head>
 
     <body>
@@ -63,7 +64,7 @@
             <div class="hiddensection fullsection" id="profile"></div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
                 <div id="assignmentbulk">
-                    <a href="/Client/pdfs/You'll Be Back - Hamilton TABS.pdf" download="Assignment"><canvas id="pdfviewer"></canvas></a>
+                    <a href="/Server/uploads/Succession Theme - Nicholas Britell TABS.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
                     <div class="hiddensection videocontainer"><video
                         id="my-video"
                         class="video-js"
@@ -74,13 +75,13 @@
                         data-setup="{}"
                         
                     >
-                    <source  src="/Server/uploads/1739900843845.mp4" type="video/mp4" /></div>
+                    <source  src="/Server/uploads/1739906212339.mp4" type="video/mp4" /></div>
                     
                     <div id="infocontainer">
                         <div id="scrollbarborder">
                             <img id="downloadingimg" src="/Client/imgs/download.png"/>
                             <div id="submissions">
-                                <div class="card" id="initialassignment">
+                                <div class="card" id="initialassignment" data-id="-1" data-listener="0" data-clicked="0">
                                     <div class="cardcontent">
                                         <div class="title">
                                             <div class="assignmentcolor color"></div>
@@ -94,7 +95,7 @@
                                         </div>
                                     </div> 
                                 </div>
-                                <div class="card hiddensection" id="initialsubmission">
+                                <div class="card hiddensection" id="initialsubmission" data-clicked="0">
                                     <div class="cardcontent">
                                         <div class="title">
                                             <div class="color"></div>
@@ -125,6 +126,6 @@
     </body>
 
     <script src="/Client/scripts/home.js"></script>
-    <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+    
     
 </html>
