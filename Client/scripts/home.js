@@ -295,13 +295,14 @@ zone.addEventListener('dragleave', (e) => {
 zone.addEventListener('drop', (e) => {
     const file = e.dataTransfer.files[0];
     console.log(file)
-    e.preventDefault()
+    
     draggedover = false
 
     const form = new FormData();
     form.append("file", file)
-
+    e.preventDefault()
     try {
+        e.preventDefault()
         fetch("http://localhost:3000/submission", {
             method: "POST",
             body: form,
