@@ -15,10 +15,10 @@ const num_to_date = {
     "12" : "DEC",
 }
 
-function TranslateDate(d) {
+function TranslateDate(d, uppercase) {
     const month = d.slice(5,7)
     const day = d.slice(8,10)
-    return num_to_date[month] + " " + day.replace(/^0+/, '')
+    return (uppercase ? num_to_date[month] : num_to_date[month].slice(0, 1) + num_to_date[month].slice(1, 3).toLowerCase()) + " " + day.replace(/^0+/, '')
 }
 
 // SIDEBAR
@@ -57,18 +57,21 @@ expandbtn.addEventListener("click", (e) => {
 
     setTimeout(toggleClear, logo.classList.contains("clear") ? 100 : 0) // making buttons visible or clear
 
-    lastpairedsection.style.opacity = 0;
-    setTimeout(() => {
-        main.classList.toggle("shrunk"); //shrinking elements
-        if (!main.classList.contains("shrunk")) { // main div is shrinking
-            lastpairedsection.style.width = "85vw";
-        }
-        else {
-            lastpairedsection.style.width = "95.6vw"
-        }
+    if (lastpairedsection) {
+        lastpairedsection.style.opacity = 0;
+        setTimeout(() => {
+            main.classList.toggle("shrunk"); //shrinking elements
+            if (!main.classList.contains("shrunk")) { // main div is shrinking
+                lastpairedsection.style.width = "85vw";
+            }
+            else {
+                lastpairedsection.style.width = "95.6vw"
+            }
 
-        lastpairedsection.style.opacity = 1;
+            lastpairedsection.style.opacity = 1;
     }, 300)
+    }
+    
 
      // hide sections while resizing
 });
@@ -134,7 +137,12 @@ for (let i = 0; i < sections.length; i++) {
                 }
                 return res.json();
             }).then(data => {
-                assignmentelements = []
+
+                let assignmentPage = document.getElementById("assignment")
+                let desc = document.getElementsByClassName("textdesc")[0]
+                let desctitle = document.getElementsByClassName("desctitle")[0]
+                let duedesc = document.getElementsByClassName("duedesc")[0]
+                let submissions = document.getElementsByClassName("submissions")[0]
 
                 if (data.length > 0) {
 
@@ -142,6 +150,8 @@ for (let i = 0; i < sections.length; i++) {
                     addIfNew(noassignments, "hiddensection")
                     removeIfNew(initialassignment, 'hiddensection')
                     for (let j = 0; j < data.length; j++) { // looping through every JSON assignment
+
+                        const details = data[j].details // details included in JSON
 
                         current = initialassignment
 
@@ -156,7 +166,7 @@ for (let i = 0; i < sections.length; i++) {
                         // assignment button styling
                         
                         const datee = current.querySelector('.date')
-                        datee.textContent = TranslateDate(data[j].due_date)
+                        datee.textContent = TranslateDate(data[j].due_date, true)
 
                         const headinge = current.querySelector(".heading")
                         headinge.textContent = data[j].title
@@ -167,36 +177,35 @@ for (let i = 0; i < sections.length; i++) {
                         // assignment button styling
 
                         current.dataset.assignment_type = data[j].type
+                        
 
-                        assignmentelements.push(current)
+                        // ASSIGNMENT BUTTON LISTENERS
+
+                        if (current.dataset.listener == '0') { 
+                            current.addEventListener("click", (e) => {
+                                if (current.dataset.assignment_type=="attachment") {
+                                    assignmentPage.classList.remove("hiddensection")
+
+                                    lastpairedsection.classList.add("hiddensection")
+                                    sections[currentsection].classList.remove("clicked")
+
+                                    desc.innerHTML = details.description
+                                    desctitle.innerHTML = data[j].title
+                                    duedesc.innerHTML = "This Assignment is Due " + TranslateDate(data[j].due_date, false)
+    
+                                    currentsection = -1
+                                    lastpairedsection = assignmentPage
+                                }
+                            })
+                        }
+                        // ASSIGNMENT BUTTON LISTENERS
+
+                        current.dataset.listener = '1'
                     }
                 }
                 else {
                     noassignments.classList.remove("hiddensection")
                     addIfNew(initialassignment, 'hiddensection')
-                }
-
-                return assignmentelements;
-            }).then(assignmentbuttons => {
-                    
-                const assignmentPage = document.getElementById("assignment")
-
-                for (let i = 0; i < assignmentbuttons.length; i++) {
-                    if (assignmentbuttons[i].dataset.listener == '0') {
-                        assignmentbuttons[i].addEventListener("click", (e) => {
-
-                            if (assignmentbuttons[i].dataset.assignment_type == "attachment") {
-                                assignmentPage.classList.remove("hiddensection")
-    
-                                lastpairedsection.classList.add("hiddensection")
-                                sections[currentsection].classList.remove("clicked")
-    
-                                currentsection = -1
-                                lastpairedsection = assignmentPage
-                            }
-                        })
-                        assignmentbuttons[i].dataset.listener = '1'
-                    }
                 }
             })
         }
@@ -204,9 +213,6 @@ for (let i = 0; i < sections.length; i++) {
 }
 
 // SIDEBAR
-
-// Assignment icons
-
 
 //PDF LOADING
 
@@ -218,7 +224,7 @@ pdfjsLib.getDocument("/Client/pdfs/You'll Be Back - Hamilton TABS.pdf").promise.
     const canvas = document.getElementById("pdfviewer");
     const ctx = canvas.getContext("2d");
 
-    const scale = 2
+    const scale = 2.15
     const viewport = page.getViewport({ scale })
 
     const multiplier = 4
@@ -236,6 +242,74 @@ pdfjsLib.getDocument("/Client/pdfs/You'll Be Back - Hamilton TABS.pdf").promise.
         viewport: viewport
     };
     page.render(renderContext);
+
+    window.addEventListener('resize', (e) => {
+        const renderContext2 = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+
+        page.render({
+            canvasContext: ctx,
+            viewport: page.getViewport({ scale })
+        });
+    })
+
 }).catch(error => {
     console.error("Error loading PDF:", error);
 });
+
+// SUBMISSION DROPPING
+
+const zone = document.getElementById("scrollbarborder")
+const scrolled = document.getElementById("submissions")
+let draggedover = false
+
+function cooldownDragLeave() {
+
+
+    if (draggedover == false) {
+        scrolled.classList.remove("hiddensection")
+        scrolled.classList.remove("noPointerEvents")
+        return;
+    }
+    else {
+    }
+
+    setTimeout(cooldownDragLeave, 70)
+}
+
+zone.addEventListener('dragover', (e) => {
+    scrolled.classList.add("hiddensection")
+    scrolled.classList.add("noPointerEvents")
+    draggedover = true
+    setTimeout(cooldownDragLeave, 70)
+    e.preventDefault();
+})
+
+zone.addEventListener('dragleave', (e) => {
+    draggedover = false
+    e.preventDefault();
+})
+
+zone.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.files[0];
+    console.log(file)
+    e.preventDefault()
+    draggedover = false
+
+    const form = new FormData();
+    form.append("file", file)
+
+    try {
+        fetch("http://localhost:3000/submission", {
+            method: "POST",
+            body: form,
+        }).then(response => response.json())
+        .then(data => {
+            console.log("File uploaded successfully:", data);
+        })
+    } catch(error) {
+        console.error("Error uploading file:", error);
+    };
+})
