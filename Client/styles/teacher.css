@@ -89,6 +89,34 @@
 
 /* sidebar */
 
+/* stats */
+
+#stats {
+    width: 30vw;
+    height: 60rem;
+    margin-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#stats #activity {
+    background-color: rgb(235, 235, 235);
+    border: 1px solid rgb(130,130,130);
+    width: 100%;
+    height: 45%;
+    border-radius: 5px;
+}
+
+#stats #general {
+    background-color: rgb(235, 235, 235);
+    border: 1px solid rgb(130,130,130);
+    width: 100%;
+    height: 15%;
+    border-radius: 5px;
+}
+
+/* stats */
 
 /* assignments */
 
@@ -96,6 +124,7 @@
     display: flex;
     /* align-items: center; */
     justify-content: center;
+    gap: 30px;
 }
 
 #assignmentstitle {
@@ -105,28 +134,30 @@
     text-decoration: underline;
     text-underline-offset: 6px;
     text-decoration-thickness: 4px;
-    text-decoration-color: #ea6d00;
+    text-decoration-color: rgb(0, 140, 255);
 }
 
 #mainblockassignments {
     background-color: rgb(235, 235, 235);
     border: 1px solid rgb(130,130,130);
     border-radius: 5px;
-    width: 50rem;
+    width: 40vw;
+    max-width: 650px;
+    min-width: 450px;
     height: 60rem;
     margin-top: 20vh;
-
 }
 
 #assignmentsdata {
     height: 100%;
-    margin-top: 3rem;
+    margin-top: 2rem;
     width: 100%;
     
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    position: relative;
 }
 
 .assignment {
@@ -218,6 +249,189 @@
     font-weight: 500;
     color: rgb(160,160,160);
 }
+
+#addAssignmentContainer {
+    --height: 30px;
+    height: var(--height);
+    width: 100px;
+    border-radius: 5px;
+    border: 1.5px solid rgb(229, 107, 0);
+    position: absolute;
+    margin-left: 70%;
+    font-size: 12px;
+    text-align: center;
+    line-height: var(--height);
+    color: rgb(229, 107, 0);
+    font-weight: 500;
+    cursor: pointer;
+    background-color: transparent;
+    
+}
+
+#addAssignmentContainer:hover {
+    background-color: rgb(255, 207, 164);
+}
+
+#submit_button {
+    --width: 5.4rem;
+    width: var(--width);
+    height: 2.2rem;
+    position: absolute;
+    z-index: 101;
+    color: rgb(229, 107, 0);
+    border: 1px solid rgb(229, 107, 0);
+    margin-top: 22rem;
+    margin-left: calc(50% - var(--width)/2);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color .2s;
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#submit_button:focus {
+    border: 1px solid rgb(229, 107, 0) !important;
+}
+
+#submit_button:hover {
+    background-color: rgb(255, 207, 164);
+}
+
+
+
+#addAssignmentSpace {
+    height: 33px;
+    width: 100px;
+}
+
+#formencompassing {
+    background-color: rgba(0,0,0,.3);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+}
+
+#newPieceForm {
+    border-radius: 5px;
+    --width: 45rem;
+    --height: 21rem;
+    position: fixed;
+    width: var(--width);
+    z-index: 100;
+    height: var(--height);
+    background-color: rgb(230,230,230);
+    border: .5px solid rgb(120,120,120);
+    margin-left: calc(50vw - var(--width)/2);
+    margin-top: calc(50vh - var(--height)/2);
+}
+
+#Pieceform {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex: row;
+    position: relative;
+    z-index: 100;
+}
+
+#titlefield {
+    width: calc(100% - 15px);
+    height: 34px;
+    margin-left: 3%;
+    margin-top: 3%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    color: rgb(20,20,20);
+    font-weight: 500;
+    padding-left: 5px;
+}
+#datefield {
+    margin-left: 3%;
+    width: 130px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.half {
+    width: 50%;
+    height: 100%;
+}
+
+#left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#assignmentuploading {
+    width: 90%;
+    height: 90%;
+    background-color: rgb(235, 235, 235);
+    border: .5px solid rgb(120,120,120);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#assignmentuploadingimg {
+    width: 15%;
+    aspect-ratio: 1/1;
+    pointer-events: none;
+}
+
+#right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#shortdescinput {
+    width: calc(100% - 15px);
+    height: 6%;
+    margin-left: 3%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    color: rgb(60,60,60);
+    font-weight: 500;
+    padding-left: 5px;
+    padding-bottom: 12px;
+}
+
+#descinput {
+    width: calc(100% - 15px);
+    height: 52.5%;
+    margin-left: 3%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    color: rgb(60,60,60);
+    font-weight: 500;
+    padding-left: 5px;
+}
+
+#AssignmentType {
+    margin: 0;
+    font-size: 13px;
+}
+
+#typeinput {
+    width: 80px;
+    height: 18px;
+    margin: 0;
+    font-size: 12px;
+    padding-left: 3px;
+    padding-bottom: 2px;
+}
+
+.orangeuploader {
+    background-color: rgb(255, 207, 164) !important;
+    border: 1px solid #ea6d00 !important;
+}
+
 
 /* assignments */
 

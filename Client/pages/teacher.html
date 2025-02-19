@@ -4,13 +4,37 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/Client/styles/global.css"></link>
-        <link rel="stylesheet" href="/Client/styles/home.css"></link>
+        <link rel="stylesheet" href="/Client/styles/teacher.css"></link>
         <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
         <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
     </head>
 
     <body>
+        <div id="formencompassing" class="hiddensection ">
+            <div id="newPieceForm">
+                <form id="Pieceform">
+                    <div id="left" class="half">
+                        <input id="titlefield" class="defaultarea" type="text" placeholder="Title" maxlength="35">
+                        <div id="datefield">
+                            <input id="actualdatefield" type="datetime-local" class="defaultarea">
+                            <p id="AssignmentType">Type:</p>
+                            <input id="typeinput" class="defaultarea" type="text" placeholder="Recording" maxlength="10">
+                        </div>
+                        
+                        <textarea id="shortdescinput" class="defaultarea textareadefault" type="text" placeholder="short notes..." maxlength="80"></textarea>
+                        <textarea id="descinput" class="defaultarea textareadefault" type="text" placeholder="description..." maxlength="500"></textarea>
+                    </div>
+                    <div id="right" class="half">
+                        <div id="assignmentuploading">
+                            <img src="/Client/imgs/download.png" id="assignmentuploadingimg"/>
+                        </div>
+                    </div>
+                    <input id="submit_button" type="submit"/>
+                </form>
+            </div>
+        </div>
+        
         <div id="sidebar">
             <h1 id="name">
                 <span class="orange">Strum</span><span class="thin">Pilot</span>
@@ -22,8 +46,8 @@
             <p id="menutag">MENU</p>
             <div id="infobar">
                 <div class="section" id="assignmentsbtn">
-                    <img class="sectionimg" src="/Client/imgs/assignments.png"/>
-                    <p class="sectiontext">Assignments</p>
+                    <img class="sectionimg" src="/Client/imgs/cap.png"/>
+                    <p class="sectiontext">Students</p>
                 </div>
                 <div class="section" id="profilebtn">
                     <img class="sectionimg profileimg" src="/Client/imgs/head.png"/>
@@ -32,12 +56,17 @@
             </div>
         </div>
         <div id="main">
-            <div class="hiddensection fullsection" id="assignments">
+            <div class="hiddensection fullsection" id="assignments"> 
+                
                 <div id="mainblockassignments">
                     <h1 id="assignmentstitle">
                         Assignments
                     </h1>
                     <div id="assignmentsdata">
+                        <div id="addAssignmentSpace"></div>
+                        <div id="addAssignmentContainer">
+                            New Piece
+                        </div>
                         <div data-listener="0" data-assignment_type="" class="assignment hiddensection" id="initial">
                             <div class="due">
                                 <p class="duetext">DUE</p>
@@ -49,7 +78,7 @@
                             </div>
                             <div class="type">
                                 <text class="heading">Recording</text>
-                                <text class="infotext">Type</text>
+                                <text class="infotext">Type</text> 
                             </div>
                         </div>
                         <div class="noassignments">
@@ -58,6 +87,10 @@
                             </h1>
                         </div>
                     </div>
+                </div>
+                <div id="stats">
+                    <div id="activity"></div>
+                    <div id="general"></div>
                 </div>
             </div>
             <div class="hiddensection fullsection" id="profile"></div>
@@ -115,7 +148,6 @@
                         <div id="description">
                             <p class="desctitle">Bianca in The Wind</p>
                             <p class="textdesc"></p>
-                            <p class="duedesc">This Assignment is Due Feb 15th</p>
                         </div>
                     </div>
                 </div>
@@ -124,7 +156,8 @@
         </div>
     </body>
 
-    <script src="/Client/scripts/home.js"></script>
+    <script src="/Client/scripts/teacher.js"></script>
+    <script src="/Client/scripts/FormManagement.js"></script>
     
     
 </html>

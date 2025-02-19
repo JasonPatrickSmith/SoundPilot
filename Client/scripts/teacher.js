@@ -338,7 +338,7 @@ for (let i = 0; i < sections.length; i++) {
                         // assignment button styling
 
                         current.dataset.assignment_type = data[j].type
-                        
+
                         assignmentTypee.textContent = data[j].type_given
                         
 
@@ -481,6 +481,11 @@ assignmentCard.addEventListener("click", (e) => {
     
     
 })
+
+
+
+
+
 
 function checker() {
     console.log(currentsection)
