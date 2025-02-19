@@ -92,7 +92,7 @@ function removeIfNew(e, remove) { // e = element, remove = classname
 
 //ASSIGNMENTS
 
-function deleteAllAssignments() {
+export function deleteAllAssignments() {
     const assignments = document.getElementsByClassName("assignment")
     for (let i = 0; i < assignments.length; i++) {
         if (assignments[i].id != "initial") {
@@ -196,7 +196,7 @@ function deleteSubmissionCards() {
 
     for (let n = 0; n < staticlength; n++) {
 
-        i = n - removed
+        let i = n - removed
 
         if (submissionCards[i].id != "initialsubmission" && submissionCards[i].id != "initialassignment") {
             submissionCards[i].remove()
@@ -259,6 +259,99 @@ function updateSubmission(assignment_id) {
     })
 }
 
+export function reloadAssignments() {
+    fetch(`http://localhost:3000/assignments?id=${student_id}`).then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
+    }).then(data => {
+        if (data.length > 0) {
+
+
+            addIfNew(noassignments, "hiddensection")
+            removeIfNew(initialassignment, 'hiddensection')
+            for (let j = 0; j < data.length; j++) { // looping through every JSON assignment
+                
+                var current = initialassignment
+
+                if (j != 0) {
+                    let newassignment = initialassignment.cloneNode(true) // cloning assignment buttons
+                    current.after(newassignment)
+                    current = newassignment
+                    current.removeAttribute("id")
+                    current.dataset.listener = '0'
+                }
+
+                // assignment button styling
+                
+                const datee = current.querySelector('.date')
+                datee.textContent = TranslateDate(data[j].due_date, true)
+
+                const headinge = current.querySelector(".heading")
+                headinge.textContent = data[j].title
+
+                const infotext = current.querySelector(".infotext")
+                infotext.textContent = data[j].short_desc
+
+                const assignmentTypee = current.querySelector(".type .heading")
+
+                // assignment button styling
+
+                current.dataset.assignment_type = data[j].type
+                
+                assignmentTypee.textContent = data[j].type_given
+                
+
+                // ASSIGNMENT BUTTON LISTENERS
+
+                if (current.dataset.listener == '0') { 
+                    current.addEventListener("click", (e) => {
+                        if (current.dataset.assignment_type=="attachment") {
+
+                            // Add initial card border
+                            clearCardBorders()
+                            if (!(assignmentCard.classList.contains("solidborder"))) { 
+                                assignmentCard.classList.add("solidborder")
+                            }
+                            assignmentCard.dataset.clicked = 1
+
+                            SetAssignmentPage(data, j)
+
+                            lastpairedsection.classList.add("hiddensection")
+                            sections[currentsection].classList.remove("clicked")
+
+                            //personalized assignment card
+                            assignmentCardTitle.textContent = data[j].title
+                            assignmentCardSubmissionDate.textContent = `Assigned on ${TranslateDate(data[j].created_at, false)}`
+
+                            //personalized submissions
+                            updateSubmission(data[j].id)
+
+                            //storing assignment id
+                            assignmentPage.dataset.id = data[j].id
+
+                            assignmentPage.classList.remove("hiddensection")
+
+                            currentsection = -1
+                            lastpairedsection = assignmentPage
+
+                            CurrentAssignmentInfo = [data[j]]
+                        }
+                    })
+                }
+                // ASSIGNMENT BUTTON LISTENERS
+
+                current.dataset.listener = '1'
+            }
+        }
+        else {
+            noassignments.classList.remove("hiddensection")
+            addIfNew(initialassignment, 'hiddensection')
+        }
+    })
+}
+
 function SetAssignmentPage(data, j) {
     const details = data[j].details // details included in JSON
 
@@ -274,9 +367,9 @@ for (let i = 0; i < sections.length; i++) {
 
         if (i != currentsection) {
 
-            pairedsectionid = (sections[i].id).slice(0, -3) // section (like assignments section) that we want to turn visible
+            const pairedsectionid = (sections[i].id).slice(0, -3) // section (like assignments section) that we want to turn visible
             sections[i].classList.add("clicked")
-            pairedsection = document.getElementById(pairedsectionid)
+            let pairedsection = document.getElementById(pairedsectionid)
             pairedsection.classList.remove("hiddensection")
             
             if (currentsection != -1) {
@@ -296,99 +389,7 @@ for (let i = 0; i < sections.length; i++) {
 
             deleteAllAssignments()
 
-            fetch(`http://localhost:3000/assignments?id=${student_id}`).then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            }).then(data => {
-                if (data.length > 0) {
-
-
-                    addIfNew(noassignments, "hiddensection")
-                    removeIfNew(initialassignment, 'hiddensection')
-                    for (let j = 0; j < data.length; j++) { // looping through every JSON assignment
-
-                        
-
-                        
-                        current = initialassignment
-
-                        if (j != 0) {
-                            let newassignment = initialassignment.cloneNode(true) // cloning assignment buttons
-                            current.after(newassignment)
-                            current = newassignment
-                            current.removeAttribute("id")
-                            current.dataset.listener = '0'
-                        }
-
-                        // assignment button styling
-                        
-                        const datee = current.querySelector('.date')
-                        datee.textContent = TranslateDate(data[j].due_date, true)
-
-                        const headinge = current.querySelector(".heading")
-                        headinge.textContent = data[j].title
-
-                        const infotext = current.querySelector(".infotext")
-                        infotext.textContent = data[j].short_desc
-
-                        const assignmentTypee = current.querySelector(".type .heading")
-
-                        // assignment button styling
-
-                        current.dataset.assignment_type = data[j].type
-                        
-                        assignmentTypee.textContent = data[j].type_given
-                        
-
-                        // ASSIGNMENT BUTTON LISTENERS
-
-                        if (current.dataset.listener == '0') { 
-                            current.addEventListener("click", (e) => {
-                                if (current.dataset.assignment_type=="attachment") {
-
-                                    // Add initial card border
-                                    clearCardBorders()
-                                    if (!(assignmentCard.classList.contains("solidborder"))) { 
-                                        assignmentCard.classList.add("solidborder")
-                                    }
-                                    assignmentCard.dataset.clicked = 1
-
-                                    SetAssignmentPage(data, j)
-
-                                    lastpairedsection.classList.add("hiddensection")
-                                    sections[currentsection].classList.remove("clicked")
-
-                                    //personalized assignment card
-                                    assignmentCardTitle.textContent = data[j].title
-                                    assignmentCardSubmissionDate.textContent = `Assigned on ${TranslateDate(data[j].created_at, false)}`
-
-                                    //personalized submissions
-                                    updateSubmission(data[j].id)
-
-                                    //storing assignment id
-                                    assignmentPage.dataset.id = data[j].id
-
-                                    assignmentPage.classList.remove("hiddensection")
-
-                                    currentsection = -1
-                                    lastpairedsection = assignmentPage
-
-                                    CurrentAssignmentInfo = [data[j]]
-                                }
-                            })
-                        }
-                        // ASSIGNMENT BUTTON LISTENERS
-
-                        current.dataset.listener = '1'
-                    }
-                }
-                else {
-                    noassignments.classList.remove("hiddensection")
-                    addIfNew(initialassignment, 'hiddensection')
-                }
-            })
+            reloadAssignments()
         }
     })
 }

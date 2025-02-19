@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 
 <html lang="en">
     <head>
@@ -15,15 +14,15 @@
             <div id="newPieceForm">
                 <form id="Pieceform">
                     <div id="left" class="half">
-                        <input id="titlefield" class="defaultarea" type="text" placeholder="Title" maxlength="35">
+                        <input name="title" id="titlefield" class="defaultarea" type="text" placeholder="Title" maxlength="35">
                         <div id="datefield">
-                            <input id="actualdatefield" type="datetime-local" class="defaultarea">
+                            <input name="date" id="actualdatefield" type="datetime-local" class="defaultarea">
                             <p id="AssignmentType">Type:</p>
-                            <input id="typeinput" class="defaultarea" type="text" placeholder="Recording" maxlength="10">
+                            <input name="type" id="typeinput" class="defaultarea" type="text" placeholder="Recording" maxlength="10">
                         </div>
                         
-                        <textarea id="shortdescinput" class="defaultarea textareadefault" type="text" placeholder="short notes..." maxlength="80"></textarea>
-                        <textarea id="descinput" class="defaultarea textareadefault" type="text" placeholder="description..." maxlength="500"></textarea>
+                        <textarea name="shortdesc" id="shortdescinput" class="defaultarea textareadefault" type="text" placeholder="short notes..." maxlength="80"></textarea>
+                        <textarea name="desc" id="descinput" class="defaultarea textareadefault" type="text" placeholder="description..." maxlength="500"></textarea>
                     </div>
                     <div id="right" class="half">
                         <div id="assignmentuploading">
@@ -156,8 +155,8 @@
         </div>
     </body>
 
-    <script src="/Client/scripts/teacher.js"></script>
-    <script src="/Client/scripts/FormManagement.js"></script>
+    <script type="module" src="/Client/scripts/home.js"></script>
+    <script type="module" src="/Client/scripts/FormManagement.js"></script>
     
     
 </html>

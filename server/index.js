@@ -8,6 +8,7 @@ const path = require("path");
 const { receiveMessageOnPort } = require("worker_threads");
 
 const defaultstudent = 1
+const defaultteacher = 2
 
 
 app.use(cors())
@@ -55,9 +56,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.get('/video', (req, res) => {
-    
-})
+
 
 app.get('/submissions', (req, res) => {
     const recieved = req.query.id
@@ -99,6 +98,44 @@ app.post("/submission", upload.single("file"),(req, res) => {
         if (err) {
             console.error('Error executing query: ' + err.stack)
             res.status(500).send('Error fetching assignments')
+            return;
+        }
+        res.json(results)
+    })
+})
+
+app.post('/assign', upload.single("file"), (req, res) => {
+    const file = req.file
+
+    
+
+    const body = req.body
+
+    const details = JSON.stringify({
+        "attachment" : req.file.path,
+        "description" : body.desc
+    });
+
+    const values = [
+        defaultteacher,
+        defaultstudent,
+        body.title,
+        "attachment",
+        body.date,
+        body.shortdesc, 
+        details,
+        body.type
+    ]
+
+    const query = `
+    INSERT INTO assignments (teacher_id, student_id, title, type, due_date, created_at, updated_at, short_desc, details, type_given)
+    VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?);
+    `
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error assigning')
             return;
         }
         res.json(results)

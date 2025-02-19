@@ -265,7 +265,7 @@
     font-weight: 500;
     cursor: pointer;
     background-color: transparent;
-    
+    transition: background-color .3s;
 }
 
 #addAssignmentContainer:hover {
@@ -280,14 +280,15 @@
     z-index: 101;
     color: rgb(229, 107, 0);
     border: 1px solid rgb(229, 107, 0);
-    margin-top: 22rem;
-    margin-left: calc(50% - var(--width)/2);
+    margin-top: 24rem;
+    margin-left: calc(25% - var(--width)/2);
     border-radius: 5px;
     cursor: pointer;
     transition: background-color .2s;
     outline: none;
     font-size: 12px;
     font-weight: 500;
+    transition: background-color .3s;
 }
 
 #submit_button:focus {
@@ -297,8 +298,6 @@
 #submit_button:hover {
     background-color: rgb(255, 207, 164);
 }
-
-
 
 #addAssignmentSpace {
     height: 33px;
@@ -316,7 +315,7 @@
 #newPieceForm {
     border-radius: 5px;
     --width: 45rem;
-    --height: 21rem;
+    --height: 27rem;
     position: fixed;
     width: var(--width);
     z-index: 100;
@@ -347,6 +346,7 @@
     font-weight: 500;
     padding-left: 5px;
 }
+
 #datefield {
     margin-left: 3%;
     width: 130px;

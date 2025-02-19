@@ -1,3 +1,5 @@
+import { reloadAssignments, deleteAllAssignments } from "./home.js"
+
 var uploading = document.getElementById("assignmentuploading")
 var PieceButton = document.getElementById("addAssignmentContainer")
 var Form = document.getElementById("Pieceform")
@@ -70,4 +72,34 @@ encompass.addEventListener("click", (e) => {
 
 FormDiv.addEventListener("click", (e) => {
     e.stopPropagation();
+})
+
+Form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    var formData = new FormData(Form)
+
+    if (currentFile != null) {
+        formData.append("file", currentFile)
+    }
+
+    Form.reset();
+    resetForm();
+
+    encompass.classList.add("hiddensection")
+
+    fetch("http://localhost:3000/assign", {
+        method: "POST",
+        body: formData
+    }).then(response => response.json())
+    .then(data => {
+        console.log("File uploaded successfully:", data);
+
+        deleteAllAssignments()
+        reloadAssignments()
+
+        return data
+    })
+
+
 })
