@@ -9,4 +9,5 @@ Again, these accounts cannot be changed, and are just for demo purposes.
 
 
 
-This project uses MySQL. [Download MySQL Workbench]([url](https://dev.mysql.com/downloads/workbench/)) to run this project.
+This project uses MySQL. [Download MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+ 
