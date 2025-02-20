@@ -1,7 +1,8 @@
 SoundPilot is a music education web app created for the Exscore 2025 hackathon using HTML, CSS, JS, NodeJS, and MySQL.
 
 This project does not have account support and is not hosted, meaning it is run locally with certain HTML files being considered by default as different types of users.
-To run with LiveServer, simply right-click on an HTML file and click "Open with Live Server".
+This Project is run with Live Server within VSCode. To download Live Server, go into the extensions tab of VSCode, search for Live Server, and install it.
+To run with Live Server, simply right-click on an HTML file and click "Open with Live Server".
 
 If you open home.html, that is considered by default the demo student, and there is no way to switch student accounts as mentioned above.
 teacher.html is the default teacher page.
