@@ -95,18 +95,9 @@
             <div class="hiddensection fullsection" id="profile"></div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
                 <div id="assignmentbulk">
-                    <a href="/Server/uploads/Succession Theme - Nicholas Britell TABS.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
-                    <div class="hiddensection videocontainer"><video
-                        id="my-video"
-                        class="video-js"
-                        controls
-                        preload="auto"
-                        width="405"
-                        height="720"
-                        data-setup="{}"
-                        
-                    >
-                    <source  src="/Server/uploads/1739906212339.mp4" type="video/mp4" /></div>
+                    <a id="assignmentdownloader" href="/Server/uploads/1740007705076.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                    <div class="hiddensection videocontainer"><video id="my-video">
+                    <source src="/Server/uploads/starter video.mp4" type="video/mp4" /></div>
                     
                     <div id="infocontainer">
                         <div id="scrollbarborder">
@@ -148,6 +139,13 @@
                             <p class="desctitle">Bianca in The Wind</p>
                             <p class="textdesc"></p>
                         </div>
+                        <div id="descriptionedit" class="hiddensection">
+                            <form id="descform">
+                                <textarea name="feedback" placeholder="Write some feedback..." id="feedbackinput" maxlength="300"></textarea>
+                                <input id="feedbacksubmit" type="submit"/>
+                            </form>
+                            
+                        </div>
                     </div>
                 </div>
                 
@@ -157,6 +155,7 @@
 
     <script type="module" src="/Client/scripts/home.js"></script>
     <script type="module" src="/Client/scripts/FormManagement.js"></script>
+    <script type="module" src="/Client/scripts/NoteManagement.js"></script>
     
     
 </html>

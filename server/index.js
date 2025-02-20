@@ -106,9 +106,6 @@ app.post("/submission", upload.single("file"),(req, res) => {
 
 app.post('/assign', upload.single("file"), (req, res) => {
     const file = req.file
-
-    
-
     const body = req.body
 
     const details = JSON.stringify({
@@ -131,6 +128,34 @@ app.post('/assign', upload.single("file"), (req, res) => {
     INSERT INTO assignments (teacher_id, student_id, title, type, due_date, created_at, updated_at, short_desc, details, type_given)
     VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?);
     `
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error assigning')
+            return;
+        }
+        res.json(results)
+    })
+})
+
+
+app.use(express.json());
+
+app.post("/feedback", (req, res) => {
+    const body = req.body
+    
+    var values = [
+        body.feedback,
+        body.submission_id
+    ]
+
+    console.log(body)
+
+    const query = `
+    UPDATE submissions
+    SET feedback = ?
+    WHERE id = ?`
 
     connection.query(query, values, (err, results) => {
         if (err) {

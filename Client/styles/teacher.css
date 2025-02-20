@@ -134,7 +134,7 @@
     text-decoration: underline;
     text-underline-offset: 6px;
     text-decoration-thickness: 4px;
-    text-decoration-color: rgb(0, 140, 255);
+    text-decoration-color: #e91f00;
 }
 
 #mainblockassignments {
@@ -284,11 +284,11 @@
     margin-left: calc(25% - var(--width)/2);
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color .2s;
+    
     outline: none;
     font-size: 12px;
     font-weight: 500;
-    transition: background-color .3s;
+    transition: background-color .2s;
 }
 
 #submit_button:focus {
@@ -400,6 +400,7 @@
     font-weight: 500;
     padding-left: 5px;
     padding-bottom: 12px;
+    overflow-y: hidden;
 }
 
 #descinput {
@@ -425,6 +426,11 @@
     font-size: 12px;
     padding-left: 3px;
     padding-bottom: 2px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#actualdatefield {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .orangeuploader {
@@ -484,6 +490,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     gap: 30px;
 }
 
@@ -512,6 +519,64 @@
     transition: border .15s ease-out;
     border: .7px solid black;
 }
+
+#descriptionedit {
+    background-color: rgb(235, 235, 235);
+    width: 100%;
+    height: 40%;
+    border-radius: 5px;
+    border: .7px solid rgb(120,120,120);
+    transition: border .15s ease-out;
+    position: relative;
+}
+
+#descform {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#feedbackinput {
+    width: 95%;
+    height: 80%;
+    border-radius: 5px;
+    background-color: rgb(235, 235, 235);
+    border: none;
+    margin-left: 2.5%;
+    margin-top: 2%;
+    resize: none;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 450;
+    font-size: 15px;
+}
+
+#feedbackinput:focus {
+    outline: none;
+}
+
+#feedbacksubmit {
+    width: 24.5%;
+    height: 2.2rem;
+    position: relative;
+    z-index: 101;
+    color: rgb(229, 107, 0);
+    border: 1px solid rgb(229, 107, 0);
+    margin-top: .6rem;
+    margin-left: 73%;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(235, 235, 235);
+    outline: none;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color .2s;
+    outline: none;
+}
+
+#feedbacksubmit:hover {
+    background-color: rgb(255, 207, 164);
+}
+
 
 #infocontainer {
     
@@ -671,8 +736,6 @@
 /* videos */
 
 .videocontainer {
-    height: 720px;
-    width: auto;
     overflow: hidden;
     border-radius: 5px;
     border: .5px solid rgb(80,80,80);

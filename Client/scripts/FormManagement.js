@@ -100,6 +100,4 @@ Form.addEventListener("submit", (e) => {
 
         return data
     })
-
-
 })

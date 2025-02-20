@@ -1,6 +1,9 @@
 const student_id = 1;
 
+let descriptionmodule = null;
+
 var CurrentAssignmentInfo = {}
+var assignmentDownloader = document.getElementById("assignmentdownloader")
 
 const num_to_date = {
     "01" : "JAN",
@@ -15,6 +18,14 @@ const num_to_date = {
     "10" : "OCT",
     "11" : "NOV",
     "12" : "DEC",
+}
+
+//checking for description module (teacher page)
+
+if (document.querySelector('script[src="/Client/scripts/NoteManagement.js"]')) {
+    import('./NoteManagement.js').then((m) => {
+        descriptionmodule = m;
+    })
 }
 
 function TranslateDate(d, uppercase) {
@@ -78,13 +89,13 @@ expandbtn.addEventListener("click", (e) => {
 
 //section buttons
 
-function addIfNew(e, add) { // e = element, add = classname
+export function addIfNew(e, add) { // e = element, add = classname
     if (!e.classList.contains(add)) {
         e.classList.add(add)
     }
 }
 
-function removeIfNew(e, remove) { // e = element, remove = classname
+export function removeIfNew(e, remove) { // e = element, remove = classname
     if (e.classList.contains(remove)) {
         e.classList.remove(remove)
     }
@@ -93,15 +104,23 @@ function removeIfNew(e, remove) { // e = element, remove = classname
 //ASSIGNMENTS
 
 export function deleteAllAssignments() {
-    const assignments = document.getElementsByClassName("assignment")
+    const assignments = Array.from(document.getElementsByClassName("assignment"))
     for (let i = 0; i < assignments.length; i++) {
-        if (assignments[i].id != "initial") {
-            assignments[i].remove()
-        }
+            if (assignments[i].id != "initial") {
+                assignments[i].remove()
+            }
+        
     }
 }
 
-var player = videojs('my-video')
+var videoElem = document.getElementById("my-video")
+videoElem.classList.add("video-js")
+
+var player = videojs('my-video', { 
+    fluid: true,
+    controls: true
+ })
+var loadingdata = false
 let videoviewere = document.getElementById("my-video")
 let videocontainer = document.querySelector(".videocontainer")
 var pdfViewer = document.getElementById("pdfviewer");
@@ -121,6 +140,8 @@ function DisplayAttachment(p) { // p = path
         player.src({type: "video/mp4", src: p})
     }
     else if (p.slice(-3) == "pdf") { // file is pdf
+        assignmentDownloader.setAttribute("href", p)
+
         if (!videocontainer.classList.contains("hiddensection")) { // hiding video
             videocontainer.classList.add("hiddensection")
         }
@@ -130,7 +151,6 @@ function DisplayAttachment(p) { // p = path
         }
 
         pdfjsLib.getDocument(p).promise.then(pdf => {
-            console.log("PDF Loaded!")
         
             return pdf.getPage(1);
         }).then(page => {
@@ -174,6 +194,49 @@ function DisplayAttachment(p) { // p = path
     }
 }
 
+function updateVid() {
+    var maxWidth = 800
+        var maxHeight = 500
+        var vidWidth = player.videoWidth();
+        var vidHeight = player.videoHeight();
+        
+    
+        var aspectRatio = vidWidth/vidHeight
+    
+        if (vidWidth > maxWidth || vidHeight > maxHeight) {
+            if (vidWidth / maxWidth > vidHeight / maxHeight) { // if width exceeds the limit more than height (relative to max)
+                vidWidth = maxWidth // width is the larger limiting factor
+                vidHeight = Math.round(maxWidth/aspectRatio) // apply aspect ratio to height
+            }
+            else { // height exceeds limit more than width
+                vidHeight = maxHeight // height is the larger limiting factor
+                vidWidth = Math.round(maxHeight/aspectRatio) // apply aspect ratio to width
+            }
+        }
+
+        var videoelemapi = player.el();
+        // videoelemapi.style.width = vidWidth/10 + "vw"
+        // videoelemapi.style.heading = vidHeight + "px"
+        videocontainer.style.width =  "min(" + vidWidth.toString() + "px, " + (vidWidth/20).toString() + "vw)"
+        videocontainer.style.height = "min(" + vidHeight.toString() + "px, " + (vidHeight/20).toString() + "vw)"
+        // videocontainer.style.aspectRatio = maxWidth > maxHeight ? maxWidth/maxHeight : maxHeight / maxWidth
+        // videoelemapi.style.aspectRatio = maxWidth > maxHeight ? maxWidth/maxHeight : maxHeight / maxWidth
+
+        // player.width(vidWidth)
+        // player.height(vidHeight)
+}
+
+player.on('loadstart', function() {
+    setTimeout(updateVid, 100)
+    // if (loadingdata == true) {
+        
+    // } else {
+        // loadingdata = true
+    // }
+    
+        
+})
+
 const noassignments = document.getElementsByClassName('noassignments')[0]
 const initialassignment = document.getElementById("initial")
 
@@ -215,7 +278,7 @@ function clearCardBorders() {
     }
 }
 
-function updateSubmission(assignment_id) {
+export function updateSubmission(assignment_id) {
 
     deleteSubmissionCards() // clearing all extra submission cards except initial
 
@@ -249,10 +312,29 @@ function updateSubmission(assignment_id) {
 
                     newCard.dataset.clicked = 1
                 }
+
+                addIfNew(desctitle, "hiddensection")
                 
                 //changing desc
-                desc.innerHTML = data[i].feedback
-                desctitle.innerHTML = "Video"
+                if (data[i].feedback == "") { // make note writing available
+                    if (descriptionmodule) {
+                        descriptionmodule.revealNote(data[i].id)
+                        descriptionmodule.resetNote()
+                    }
+                    updateDesc(false, data[i].feedback, false, "")
+                }
+                else { //show already written notes
+                    if (descriptionmodule) {
+                        descriptionmodule.hideNote()
+                    }
+                    
+                    updateDesc(false, data[i].feedback, false, "")
+                    if (!desctitle.classList.contains('hiddensection')) {
+                        desctitle.classList.add("hiddensection")
+                    }
+                    
+                }
+                
                 
             }) // click event listeners
         }
@@ -352,12 +434,27 @@ export function reloadAssignments() {
     })
 }
 
+export function updateDesc(title, descn, hide, titlen) {
+    desc.innerHTML = descn
+    if (title) {
+        removeIfNew(desctitle, "hiddensection")
+        desctitle.innerHTML = titlen
+    }
+    if (hide && descriptionmodule) {
+        descriptionmodule.hideNote()
+    }
+    
+}
+
 function SetAssignmentPage(data, j) {
+    if (descriptionmodule) {
+        descriptionmodule.hideNote()
+    }
+
     const details = data[j].details // details included in JSON
 
     // personalized description
-    desc.innerHTML = details.description
-    desctitle.innerHTML = data[j].title
+    updateDesc(true, details.description, true, data[j].title)
 
     DisplayAttachment("/Server/" + details.attachment)
 }
@@ -398,74 +495,6 @@ for (let i = 0; i < sections.length; i++) {
 
 // SUBMISSION DROPPING
 
-const zone = document.getElementById("scrollbarborder")
-const scrolled = document.getElementById("submissions")
-let draggedover = false
-
-function cooldownDragLeave() {
-
-
-    if (draggedover == false) {
-        scrolled.classList.remove("hiddensection")
-        scrolled.classList.remove("noPointerEvents")
-        return;
-    }
-    else {
-    }
-
-    setTimeout(cooldownDragLeave, 70)
-}
-
-zone.addEventListener('dragover', (e) => {
-    scrolled.classList.add("hiddensection")
-    scrolled.classList.add("noPointerEvents")
-    draggedover = true
-    setTimeout(cooldownDragLeave, 70)
-    e.preventDefault();
-})
-
-zone.addEventListener('dragleave', (e) => {
-    draggedover = false
-    e.preventDefault();
-})
-
-zone.addEventListener('drop', (e) => {
-    const file = e.dataTransfer.files[0];
-    
-    console.log(file.type)
-    e.preventDefault()
-
-    if (file.type == "application/pdf" || file.type == "video/mp4") {
-
-        const form = new FormData();
-
-        form.append("file", file)
-        form.append("assignment_id", assignmentPage.dataset.id)
-        form.append("submission_type", file.type)
-
-        
-        try {
-            e.preventDefault()
-            fetch("http://localhost:3000/submission", {
-                method: "POST",
-                body: form,
-            }).then(response => response.json())
-            .then(data => {
-                console.log("File uploaded successfully:", data);
-                return data
-            }).then(stuff => { // updatingsubmissions
-                updateSubmission(assignmentPage.dataset.id)
-            }) 
-        } catch(error) {
-            console.error("Error uploading file:", error);
-        };
-    
-    }
-    
-    draggedover = false
-
-    
-})
 
 assignmentCard.addEventListener("click", (e) => {
     if (assignmentCard.dataset.clicked == 0) {
@@ -484,7 +513,6 @@ assignmentCard.addEventListener("click", (e) => {
 })
 
 function checker() {
-    console.log(currentsection)
     setTimeout(checker, 50)
 }
 

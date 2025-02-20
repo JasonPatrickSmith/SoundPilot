@@ -25,6 +25,10 @@
                     <img class="sectionimg" src="/Client/imgs/assignments.png"/>
                     <p class="sectiontext">Assignments</p>
                 </div>
+                <div class="section" id="practicebtn">
+                    <img class="sectionimg practiceimg" src="/Client/imgs/scope.png"/>
+                    <p class="sectiontext practicetext">Practice<p>
+                </div>
                 <div class="section" id="profilebtn">
                     <img class="sectionimg profileimg" src="/Client/imgs/head.png"/>
                     <p class="sectiontext profiletext">Profile<p>
@@ -60,21 +64,13 @@
                     </div>
                 </div>
             </div>
+            <div class="hiddensection fullsection" id="practice"></div>
             <div class="hiddensection fullsection" id="profile"></div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
                 <div id="assignmentbulk">
-                    <a href="/Server/uploads/Succession Theme - Nicholas Britell TABS.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
-                    <div class="hiddensection videocontainer"><video
-                        id="my-video"
-                        class="video-js"
-                        controls
-                        preload="auto"
-                        width="405"
-                        height="720"
-                        data-setup="{}"
-                        
-                    >
-                    <source  src="/Server/uploads/1739906212339.mp4" type="video/mp4" /></div>
+                    <a href="/Server/uploads/starter pdf.pdf" download="Assignment" id="assignmentdownloader"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                    <div class="hiddensection videocontainer"><video id="my-video">
+                    <source src="/Server/uploads/starter video.mp4" type="video/mp4" /></div>
                     
                     <div id="infocontainer">
                         <div id="scrollbarborder">
@@ -124,7 +120,8 @@
         </div>
     </body>
 
-    <script src="/Client/scripts/home.js"></script>
+    <script type="module" src="/Client/scripts/home.js"></script>
+    <script type="module" src="/Client/scripts/HandleSubmissions.js"></script>
     
     
 </html>
