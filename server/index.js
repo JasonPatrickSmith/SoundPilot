@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 const express = require("express");
 const app = express();
 const cors = require('cors')
@@ -10,7 +13,6 @@ const { receiveMessageOnPort } = require("worker_threads");
 const defaultstudent = 1
 const defaultteacher = 2
 
-
 app.use(cors())
 
 app.listen(port, () => {
@@ -18,10 +20,10 @@ app.listen(port, () => {
 });
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'HulkBuster658',
-    database: 'strumpilot'
+    host: process.env.DB_HOST.toString(),
+    user: process.env.DB_USER.toString(),
+    password: process.env.DB_PASSWORD.toString(),
+    database: process.env.DB_NAME.toString()
   });
 
 connection.connect((err) => {
