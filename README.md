@@ -9,5 +9,6 @@ Again, these accounts cannot be changed, and are just for demo purposes.
 
 
 
-This project uses MySQL. [Download MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
- 
+This project uses MySQL. [Download MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
+To setup this project's database, go into the Server directory within this project, and run "node setup.js".
+Answer the prompts about your local MySQL installation, and a local database will be created for you, hosting the site.
