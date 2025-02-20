@@ -91,7 +91,7 @@ app.post("/submission", upload.single("file"),(req, res) => {
 
     const query = `
     INSERT INTO submissions (assignment_id, student_id, submission_data, submitted_at, feedback)
-    VALUES (?, ?, ?, NOW(), "feedback");
+    VALUES (?, ?, ?, NOW(), "");
     `
 
     connection.query(query, values, (err, results) => {
