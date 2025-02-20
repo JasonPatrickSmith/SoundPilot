@@ -82,7 +82,7 @@
     margin-left: var(--sidebar-margin-left);
     margin-top: 10.5px;
     color: black;
-    font-size: 31.5px;
+    font-size: 30.5px;
     transition: opacity .1s ease-out;
     opacity: 1;
 }
