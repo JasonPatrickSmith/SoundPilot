@@ -12,10 +12,10 @@ const DB_PASSWORD = prompt('Enter MySQL password: ');
 // const DB_NAME = prompt('Enter your database name: ');
 const DB_NAME = 'strumpilot';
 
-// MySQL dump file
+
 const dumpFile = './database.sql';
 
-// Generate .env file
+
 const envContent = `DB_HOST=${DB_HOST}
 DB_PORT=${DB_PORT}
 DB_USER=${DB_USER}
@@ -33,14 +33,14 @@ const createDatabaseIfNotExists = () => {
         return;
       }
       console.log(`Database '${DB_NAME}' is ready.`);
-      connection.end(); // Close the connection after creating the database
+      connection.end(); 
     });
   };
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',  // Replace with your MySQL username
-    password: 'HulkBuster658'  // Replace with your MySQL password
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD
   });
 
 connection.connect((err) => {
@@ -50,12 +50,12 @@ connection.connect((err) => {
     }
     console.log('Connected to MySQL');
     
-    createDatabaseIfNotExists();  // Call the function to create the database
+    createDatabaseIfNotExists();  
     setTimeout(dump, 100)
   });
 
 
-// Apply MySQL dump
+
 const command = `mysql -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < ${dumpFile}`;
 
 function dump() {
