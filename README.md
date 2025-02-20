@@ -7,4 +7,6 @@ If you open home.html, that is considered by default the demo student, and there
 teacher.html is the default teacher page.
 Again, these accounts cannot be changed, and are just for demo purposes.
 
-Since this project uses MySQL and is hosted locally, you must update the Environment Variables within the project relating to your local MySQL server.
+
+
+This project uses MySQL. [Download MySQL Workbench]([url](https://dev.mysql.com/downloads/workbench/)) to run this project.
