@@ -2,14 +2,19 @@ import { removeIfNew, addIfNew, getLastPairedSection, getCurrentSection, setLast
 
 const sections = document.getElementsByClassName("section") // all sections
 const mainPage = document.getElementById("practice")
+console.log(mainPage)
 
+const defaultUserId = 1
 const exercisesdiv = document.getElementById("exercises")
 const exercises = document.getElementsByClassName("exercise")
+
+var startTime = null
+var rightNotes = 0
+var wrongNotes = 0
 
 for (let i = 0; i < exercises.length; i++) {
     exercises[i].addEventListener("click", (e) => {
 
-        console.log(exercises)
 
         sections[getCurrentSection()].classList.remove("clicked")
         addIfNew(getLastPairedSection(), "hiddensection")
@@ -99,8 +104,16 @@ function removeClass(cls, e) {
 }
 
 function ChooseRandomNote() {
-    const randomNote = notechoices[Math.round(Math.random() * 7) - 1] + "/" + (3 + Math.floor(Math.random() * 3)).toString()
-    const randommodifier = accidentals[Math.round(Math.random() * 3) - 1]
+
+    const randomaddoni = 3 + Math.floor(Math.random() * 3)
+    const randomnotei = Math.round(Math.random() * 6)
+
+    const randomNote = notechoices[randomnotei] + "/" + (randomaddoni).toString()
+    const modifieri = Math.round(Math.random() * 3) - 1
+    const randommodifier = accidentals[modifieri]
+    // console.log("should be 0 1 or 2: " + modifieri)
+    // console.log("should be between 0 and 6: " + randomnotei)
+    // console.log("should be 3 4 or 5: " + randomaddoni)
     return [randomNote, randommodifier]
 }
 
@@ -117,26 +130,126 @@ for (let i = 0; i < notes.length; i++) {
         const accidental1 = accidentaltable[currentVal[1]]
 
         if (currentVal[0] == chosenNote[0] && accidental1 == chosenAccidental) {
+            notes[i].classList.add("correctchoice")
+            setTimeout(removeClass, 100, "correctchoice", notes[i])
             const rand = ChooseRandomNote()
             chosenNote = rand[0]
             chosenAccidental = rand[1]
 
+            console.log(chosenNote, chosenAccidental)
             renderSingle(chosenNote, chosenAccidental)
-
-            notes[i].classList.add("correctchoice")
-            setTimeout(removeClass, 100, "correctchoice", notes[i])
+            rightNotes += 1
+            
         }
         else {
             notes[i].classList.add("wrongchoice")
+            wrongNotes += 1
             setTimeout(removeClass, 100, "wrongchoice", notes[i])
         }
 
     })
 }
 renderSingle(chosenNote)
-// setTimeout(renderSingle, 1000, "c/5")
-// setTimeout(renderSingle, 2000, "d/5")
-// setTimeout(renderSingle, 3000, "e/5")
-// setTimeout(renderSingle, 4000, "f/4")
-// setTimeout(renderSingle, 5000, "g/4")
-// setTimeout(renderSingle, 6000, "a/4")
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const targetElement = document.getElementById("noteidentifyingpage")
+    const noteIdentifyingAccuracyE = document.querySelector("#noteidentifying .accuracycontainer .accuracynum")
+
+
+    if (targetElement && mainPage) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === "attributes" && mutation.attributeName === "class") {
+                    if (!(mainPage.classList.contains("hiddensection"))) { // revealing main page
+                        
+
+                        var totalwrong = 0
+                        var totalright = 0
+                        fetch(`http://localhost:3000/noteidentifying?id=${defaultUserId}`).then(res => {
+                            return res.json()
+                        }).then(data => {
+                            for (let i = 0; i < data.length; i++) {
+                                totalwrong += data[i].wrong_guesses
+                                totalright += data[i].correct_guesses
+                            }
+
+                            const accuracy = Math.round(totalright/totalwrong*100)
+                            noteIdentifyingAccuracyE.textContent = accuracy.toString() + "%"
+                            
+                            const accuracyLevels = ['bad', 'mid', 'good']
+
+                            for (let i = 0; i < accuracyLevels.length; i++) {
+                                if (noteIdentifyingAccuracyE.classList.contains(accuracyLevels[i] + "accuracy")) {
+                                    noteIdentifyingAccuracyE.classList.remove(accuracyLevels[i] + "accuracy")
+                                }
+                            }
+
+                            var accuracyLevel = ""
+                            if (accuracy > 40) {
+                                if (accuracy > 80) {
+                                    accuracyLevel = "good"
+                                }
+                                else {
+                                    accuracyLevel = "mid"
+                                }
+                            }
+                            else {
+                                accuracyLevel = "bad"
+                            }
+
+                            noteIdentifyingAccuracyE.classList.add(accuracyLevel + "accuracy")
+                        })
+                    }
+
+
+
+
+                    if (targetElement.classList.contains("hiddensection")) {
+
+                        if(rightNotes + wrongNotes > 0) {
+                            const endTime = new Date()
+                            const time = Math.floor((endTime - startTime)/1000)
+                        
+                            
+
+                            const details = {
+                                'startTime': startTime.toISOString(),
+                                'endTime': endTime.toISOString(),
+                                'user_id': defaultUserId,
+                                'rightNotes': rightNotes,
+                                'wrongNotes': wrongNotes,
+                                'duration': time
+                            }
+
+                            console.log(details)
+
+                            console.log("Class 'hidden' was added!");
+                            fetch("http://localhost:3000/noteidentifying", {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': "application/json"
+                                },
+                                body: JSON.stringify(details)
+                            })
+
+                            startTime = null
+                            wrongNotes = 0
+                            rightNotes = 0
+                        }
+                        
+                    } else {
+                        console.log("Class 'hidden' was removed!");
+                        startTime = new Date()
+                    }
+                }
+            });
+        });
+
+        const config = { attributes: true, attributeFilter: ["class"] }
+        observer.observe(targetElement, config);
+        observer.observe(mainPage, config)
+    }
+    
+});

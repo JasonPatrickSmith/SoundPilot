@@ -147,15 +147,47 @@
 }
 
 .correctchoice {
-    background-color: #ffc694;
-    border: .5px solid #eb6d00 !important;
+    background-color: #ffa85d;
+    border: .5px solid #bf5900 !important;
     transition: background-color .1s;
     transition: border .1s;
 }
 
 .wrongchoice {
-    background-color: #ffc4bb;
-    border: .5px solid #d01c00 !important;
+    background-color: #ff7e6a;
+    border: .5px solid #c41a00 !important;
     transition: background-color .1s;
     transition: border .1s;
+}
+
+.accuracycontainer {
+    height: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.accuracynum {
+    margin: 0;
+    height: 38px;
+    color: rgb(193, 158, 0);
+}
+
+.accuracyname {
+    margin: 0;
+    /* color:  */
+}
+
+.goodaccuracy {
+    color: green !important;
+}
+
+.midaccuracy {
+    color: #d56400;
+}
+
+.badaccuracy {
+    color: rgb(216, 0, 0);
 }

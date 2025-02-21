@@ -7,6 +7,7 @@
         <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
         <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
     <body>
@@ -44,14 +45,14 @@
             </div>
             <p id="menutag">MENU</p>
             <div id="infobar">
-                <div class="section" id="assignmentsbtn">
+                <div class="section clicked" id="assignmentsbtn">
                     <img class="sectionimg" src="/Client/imgs/cap.png"/>
                     <p class="sectiontext">Students</p>
                 </div>
             </div>
         </div>
         <div id="main">
-            <div class="hiddensection fullsection" id="assignments"> 
+            <div class="fullsection" id="assignments"> 
                 
                 <div id="mainblockassignments">
                     <h1 id="assignmentstitle">
@@ -66,6 +67,8 @@
                             <div class="due">
                                 <p class="duetext">DUE</p>
                                 <div class="date">FEB 18</div>
+                                <div class="datehighlight">
+                                </div>
                             </div>
                             <div class="info">
                                 <text class="heading">Mozart 132</text>
@@ -85,7 +88,6 @@
                 </div>
                 <div id="stats">
                     <div id="activity"></div>
-                    <div id="general"></div>
                 </div>
             </div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
@@ -163,6 +165,7 @@
     <script type="module" src="/Client/scripts/home.js"></script>
     <script type="module" src="/Client/scripts/FormManagement.js"></script>
     <script type="module" src="/Client/scripts/NoteManagement.js"></script>
+    <script type="module" src="/Client/scripts/ChartManager.js"></script>
     
     
 </html>

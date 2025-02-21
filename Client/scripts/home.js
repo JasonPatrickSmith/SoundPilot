@@ -60,9 +60,9 @@ function toggleClear() {
 
 // main container
 const main = document.getElementById("main")
-const sections = document.getElementsByClassName("section") // all sections
-var currentsection = -1; // initial button
-var lastpairedsection = null; // initial section
+const sections = [document.getElementById("assignmentsbtn"), document.getElementById("practicebtn")]
+var currentsection = 0; // initial button
+var lastpairedsection = document.getElementById("assignments"); // initial section
 
 export function setCurrentSection(n) {
     currentsection = n
@@ -195,9 +195,15 @@ function renderPDF() {
     });
 }
 
+const pdfbuttons = document.getElementById("pdfbuttons")
+
 function DisplayAttachment(p) { // p = path
 
+    const fileURL = `/uploads`
+
     if (p.slice(-3) == "mp4") { // file is video
+
+        addIfNew(pdfbuttons, "hiddensection")
 
         if (videocontainer.classList.contains("hiddensection")) { // making video visible
             videocontainer.classList.remove("hiddensection")
@@ -207,10 +213,13 @@ function DisplayAttachment(p) { // p = path
             pdfViewer.classList.add("hiddensection")
         }
 
-        player.src({type: "video/mp4", src: p})
+        player.src({type: "video/mp4", src: `http://localhost:3000/uploads?path=${p}`})
     }
     else if (p.slice(-3) == "pdf") { // file is pdf
-        assignmentDownloader.setAttribute("href", p)
+        removeIfNew(pdfbuttons, "hiddensection")
+        
+
+        assignmentDownloader.setAttribute("href", `http://localhost:3000/uploads?path=${p}`)
 
         if (!videocontainer.classList.contains("hiddensection")) { // hiding video
             videocontainer.classList.add("hiddensection")
@@ -226,7 +235,7 @@ function DisplayAttachment(p) { // p = path
 
 function updateVid() {
     var maxWidth = 800
-        var maxHeight = 500
+        var maxHeight = 800
         var vidWidth = player.videoWidth();
         var vidHeight = player.videoHeight();
         
@@ -237,10 +246,12 @@ function updateVid() {
             if (vidWidth / maxWidth > vidHeight / maxHeight) { // if width exceeds the limit more than height (relative to max)
                 vidWidth = maxWidth // width is the larger limiting factor
                 vidHeight = Math.round(maxWidth/aspectRatio) // apply aspect ratio to height
+                console.log("width constraint")
             }
             else { // height exceeds limit more than width
                 vidHeight = maxHeight // height is the larger limiting factor
-                vidWidth = Math.round(maxHeight/aspectRatio) // apply aspect ratio to width
+                vidWidth = Math.round(maxHeight*aspectRatio) // apply aspect ratio to width
+                console.log("height constraint")
             }
         }
 
@@ -249,6 +260,7 @@ function updateVid() {
         // videoelemapi.style.heading = vidHeight + "px"
         videocontainer.style.width =  "min(" + vidWidth.toString() + "px, " + (vidWidth/20).toString() + "vw)"
         videocontainer.style.height = "min(" + vidHeight.toString() + "px, " + (vidHeight/20).toString() + "vw)"
+
         // videocontainer.style.aspectRatio = maxWidth > maxHeight ? maxWidth/maxHeight : maxHeight / maxWidth
         // videoelemapi.style.aspectRatio = maxWidth > maxHeight ? maxWidth/maxHeight : maxHeight / maxWidth
 
@@ -338,7 +350,9 @@ export function updateSubmission(assignment_id) {
                     clearCardBorders() // clearing all borders
                     newCard.classList.add("solidborder") //setting border for clicked card\
                     pdfpage = 1
-                    DisplayAttachment("/Server/" + data[i].submission_data.file) // displaying card attachment/media
+                    const serverURL = data[i].submission_data.file
+
+                    DisplayAttachment(data[i].submission_data.file) // displaying card attachment/media
                     
 
                     newCard.dataset.clicked = 1
@@ -416,6 +430,30 @@ export function reloadAssignments() {
                 assignmentTypee.textContent = data[j].type_given
                 
 
+                // assignmentbuttondelete
+                const deletebtn = current.getElementsByClassName("datehighlight")[0]
+                if (deletebtn) {
+                    deletebtn.addEventListener("click", (e) => {
+                        event.stopPropagation()
+
+                        const details = {
+                            'id' : data[j].id
+                        }
+
+                        fetch("http://localhost:3000/deleteAssignment", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': "application/json"
+                            },
+                            body: JSON.stringify(details)
+                        }).then(res => {
+                            deleteAllAssignments()
+                            reloadAssignments()
+                        })
+
+                    })
+                }
+
                 // ASSIGNMENT BUTTON LISTENERS
 
                 if (current.dataset.listener == '0') { 
@@ -487,40 +525,46 @@ function SetAssignmentPage(data, j) {
     // personalized description
     updateDesc(true, details.description, true, data[j].title)
     pdfpage = 1
-    DisplayAttachment("/Server/" + details.attachment)
+    const serverURL = details.attachment
+
+    // fetch()
+
+    DisplayAttachment(details.attachment)
     
 }
 
 for (let i = 0; i < sections.length; i++) {
-    sections[i].addEventListener("click", (e) => {
+    if (sections[i]) {
+        sections[i].addEventListener("click", (e) => {
 
-        if (i != currentsection) {
-
-            const pairedsectionid = (sections[i].id).slice(0, -3) // section (like assignments section) that we want to turn visible
-            sections[i].classList.add("clicked")
-            let pairedsection = document.getElementById(pairedsectionid)
-            pairedsection.classList.remove("hiddensection")
-            
-            if (currentsection != -1) {
+            if (i != currentsection) {
+    
+                const pairedsectionid = (sections[i].id).slice(0, -3) // section (like assignments section) that we want to turn visible
+                sections[i].classList.add("clicked")
+                let pairedsection = document.getElementById(pairedsectionid)
+                pairedsection.classList.remove("hiddensection")
                 
-                sections[currentsection].classList.remove("clicked")
-            }
-            if (lastpairedsection != null) {
-                lastpairedsection.classList.add("hiddensection")
+                if (currentsection != -1) {
+                    
+                    sections[currentsection].classList.remove("clicked")
+                }
+                if (lastpairedsection != null) {
+                    lastpairedsection.classList.add("hiddensection")
+                }
+                
+                currentsection = i
+                lastpairedsection = pairedsection
             }
             
-            currentsection = i
-            lastpairedsection = pairedsection
-        }
-        
-        if (sections[i].id == "assignmentsbtn") {
-
-
-            deleteAllAssignments()
-
-            reloadAssignments()
-        }
-    })
+            if (sections[i].id == "assignmentsbtn") {
+    
+    
+                deleteAllAssignments()
+    
+                reloadAssignments()
+            }
+        })  
+    }
 }
 
 // SIDEBAR

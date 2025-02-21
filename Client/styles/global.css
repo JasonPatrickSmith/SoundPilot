@@ -262,6 +262,7 @@ input:focus {
     align-items: center;
     justify-content: center;
     background-color: rgb(220,220,220);
+    position: relative;
 }
 
 .due .duetext {
@@ -283,6 +284,7 @@ input:focus {
     margin-left: 15px;
     gap: 2px;
     position: relative;
+    pointer-events: none;
 }
 
 .info .heading {
@@ -314,6 +316,7 @@ input:focus {
     align-items: center;
     width: 10rem;
     height: 100%;
+    pointer-events: none;
 }
 
 .type .heading {

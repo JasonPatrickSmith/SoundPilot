@@ -109,7 +109,6 @@ app.post("/submission", upload.single("file"),(req, res) => {
 app.post('/assign', upload.single("file"), (req, res) => {
     const file = req.file
     const body = req.body
-
     const details = JSON.stringify({
         "attachment" : req.file.path,
         "description" : body.desc
@@ -160,6 +159,76 @@ app.post("/feedback", (req, res) => {
     WHERE id = ?`
 
     connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error assigning')
+            return;
+        }
+        res.json(results)
+    })
+})
+
+app.use(express.json());
+
+app.post('/noteidentifying', (req, res) => {
+    const body = req.body
+    console.log(body)
+    res.json({ message: 'Received' })
+
+    const query = `
+    INSERT INTO note_identifying_sessions (user_id, correct_guesses, wrong_guesses, start_time, end_time, duration_seconds, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, NOW())
+    `
+
+    const values = [
+        body.user_id,
+        body.rightNotes,
+        body.wrongNotes,
+        body.startTime.slice(0, 19).replace('T', ' '),
+        body.endTime.slice(0, 19).replace('T', ' '),
+        body.duration,
+    ]
+
+    connection.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error assigning')
+            return;
+        }
+        res.json(results)
+    })
+})
+
+app.get('/noteidentifying', (req, res) => {
+    const id = req.query.id
+
+    connection.query(`SELECT * FROM note_identifying_sessions WHERE user_id = ${id}`, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error fetching assignments')
+            return;
+        }
+        res.json(results)
+    })
+})
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/uploads', (req, res) => {
+
+    
+    const path1 = req.query.path
+    const pathAdded = path.join(__dirname, path1)
+    res.sendFile(pathAdded, (err) => {
+      });
+})
+
+app.post('/deleteAssignment', (req, res) => {
+    const body = req.body
+
+    const query = `DELETE FROM assignments WHERE id=${body.id}`
+
+    connection.query(query, (err, results) => {
         if (err) {
             console.error('Error executing query: ' + err.stack)
             res.status(500).send('Error assigning')

@@ -25,14 +25,6 @@
     border-radius: 5px;
 }
 
-#stats #general {
-    background-color: rgb(235, 235, 235);
-    border: 1px solid rgb(130,130,130);
-    width: 100%;
-    height: 15%;
-    border-radius: 5px;
-}
-
 /* stats */
 
 /* assignments */
@@ -303,4 +295,20 @@
 
 #feedbacksubmit:hover {
     background-color: rgb(255, 207, 164);
+}
+
+.datehighlight {
+    position: absolute;
+    width: 11%;
+    background-color: #ffa251;
+    border: 1px solid #ea6d00;
+    /* border-radius: 5px; */
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    margin-bottom: 80%;
+    margin-right: 80%;
+    cursor:pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
