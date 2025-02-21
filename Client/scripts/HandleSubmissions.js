@@ -24,6 +24,7 @@ zone.addEventListener('dragover', (e) => {
     scrolled.classList.add("hiddensection")
     scrolled.classList.add("noPointerEvents")
     draggedover = true
+    zone.classList.add("submissionborder")
     setTimeout(cooldownDragLeave, 70)
     e.preventDefault();
 })
@@ -31,9 +32,11 @@ zone.addEventListener('dragover', (e) => {
 zone.addEventListener('dragleave', (e) => {
     draggedover = false
     e.preventDefault();
+    zone.classList.add("submissionborder")
 })
 
 zone.addEventListener('drop', (e) => {
+    zone.classList.remove("submissionborder")
     const file = e.dataTransfer.files[0];
     
     e.preventDefault()

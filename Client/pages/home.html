@@ -5,9 +5,15 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/Client/styles/global.css"></link>
         <link rel="stylesheet" href="/Client/styles/home.css"></link>
+        <link rel="stylesheet" href="/Client/styles/practice.css"></link>
         <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
         <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+        <script src="
+https://cdn.jsdelivr.net/npm/vexflow@4.2.5/build/cjs/vexflow.min.js
+"></script>
+
+
     </head>
 
     <body>
@@ -28,10 +34,6 @@
                 <div class="section" id="practicebtn">
                     <img class="sectionimg practiceimg" src="/Client/imgs/scope.png"/>
                     <p class="sectiontext practicetext">Practice<p>
-                </div>
-                <div class="section" id="profilebtn">
-                    <img class="sectionimg profileimg" src="/Client/imgs/head.png"/>
-                    <p class="sectiontext profiletext">Profile<p>
                 </div>
             </div>
         </div>
@@ -64,11 +66,37 @@
                     </div>
                 </div>
             </div>
-            <div class="hiddensection fullsection" id="practice"></div>
-            <div class="hiddensection fullsection" id="profile"></div>
+            <div class="hiddensection fullsection" id="practice">
+                <div id="mainblockpractice">
+                    <h1 id="practicetitle">
+                        Practice
+                    </h1>
+                    <div id="exercises">
+                        <div data-assignment_type="" class="exercise" id="noteidentifying" data-page="noteidentifyingpage" >
+                            <div class="imagecontainer">
+                                <img class="practiceimage" src="/Client/imgs/simplenote.png" id="simplenoteimg">
+                            </div>
+                            <div class="info">
+                                <text class="heading">Note Identification</text>
+                                <text class="infotext">Identify notes on the staff</text>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
                 <div id="assignmentbulk">
-                    <a href="/Server/uploads/starter pdf.pdf" download="Assignment" id="assignmentdownloader"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                    <div id="pdfcontainer">
+                        <div id="pdfbuttons">
+                            <div class="pdfbutton" id="backward">
+                                <p id="backwardarrow" class="arrow"><</p>
+                            </div>
+                            <div class="pdfbutton" id="forward">
+                                <p id="forwardarrow" class="arrow">></p>
+                            </div>
+                        </div>
+                        <a id="assignmentdownloader" href="/Server/uploads/starter pdf.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                    </div>
                     <div class="hiddensection videocontainer"><video id="my-video">
                     <source src="/Server/uploads/starter video.mp4" type="video/mp4" /></div>
                     
@@ -117,11 +145,43 @@
                 </div>
                 
             </div>
+            <div class="hiddensection fullsection" id="noteidentifyingpage">
+                <div id="practiceisland">
+                    <div id="staff">
+                        
+                    </div>
+                    <div id="notes">
+                        <div id="notesgrid">
+                            <div class="notebutton" data-note="cs">C#</div>
+                            <div class="notebutton" data-note="ds">D#</div>
+                            <div class="notebutton" data-note="es">E#</div>
+                            <div class="notebutton" data-note="fs">F#</div>
+                            <div class="notebutton" data-note="gs">G#</div>
+                            <div class="notebutton" data-note="as">A#</div>
+                            <div class="notebutton" data-note="bs">B#</div>
+                            <div class="notebutton" data-note="cn">C</div>
+                            <div class="notebutton" data-note="dn">D</div>
+                            <div class="notebutton" data-note="en">E</div>
+                            <div class="notebutton" data-note="fn">F</div>
+                            <div class="notebutton" data-note="gn">G</div>
+                            <div class="notebutton" data-note="an">A</div>
+                            <div class="notebutton" data-note="bn">B</div>
+                            <div class="notebutton" data-note="cf">Cb</div>
+                            <div class="notebutton" data-note="df">Db</div>
+                            <div class="notebutton" data-note="ef">Eb</div>
+                            <div class="notebutton" data-note="ff">Fb</div>
+                            <div class="notebutton" data-note="gf">Gb</div>
+                            <div class="notebutton" data-note="af">Ab</div>
+                            <div class="notebutton" data-note="bf">Bb</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 
     <script type="module" src="/Client/scripts/home.js"></script>
     <script type="module" src="/Client/scripts/HandleSubmissions.js"></script>
-    
+    <script type="module" src="/Client/scripts/MusicPractice.js"></script>
     
 </html>

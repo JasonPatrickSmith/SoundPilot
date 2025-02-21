@@ -4,6 +4,8 @@ let descriptionmodule = null;
 
 var CurrentAssignmentInfo = {}
 var assignmentDownloader = document.getElementById("assignmentdownloader")
+var pdfpage = 1
+var maxpages = 4;
 
 const num_to_date = {
     "01" : "JAN",
@@ -59,8 +61,26 @@ function toggleClear() {
 // main container
 const main = document.getElementById("main")
 const sections = document.getElementsByClassName("section") // all sections
-let currentsection = -1; // initial button
-let lastpairedsection = null; // initial section
+var currentsection = -1; // initial button
+var lastpairedsection = null; // initial section
+
+export function setCurrentSection(n) {
+    currentsection = n
+}
+
+export function getCurrentSection() {
+    return currentsection
+}
+
+export function setLastPairedSection(e) {
+    lastpairedsection = e
+}
+
+export function getLastPairedSection() {
+    console.log(lastpairedsection)
+    return lastpairedsection
+}
+
 
 
 expandbtn.addEventListener("click", (e) => {
@@ -125,6 +145,56 @@ let videoviewere = document.getElementById("my-video")
 let videocontainer = document.querySelector(".videocontainer")
 var pdfViewer = document.getElementById("pdfviewer");
 
+function renderPDF() {
+
+    const p = assignmentDownloader.getAttribute('href')
+
+    pdfjsLib.getDocument(p).promise.then(pdf => {
+        
+        maxpages = pdf.numPages
+
+        return pdf.getPage(pdfpage);
+    }).then(page => {
+
+        var canvas = pdfViewer
+        const ctx = canvas.getContext("2d");
+    
+        const scale = 2.15
+        const viewport = page.getViewport({ scale })
+    
+        const multiplier = 4
+    
+        canvas.width = viewport.width
+        canvas.height = viewport.height
+        // canvas.style.width = `${viewport.width/multiplier}px`
+        // canvas.style.height = `${viewport.height/multiplier}px`
+        canvas.style.width = `${viewport.width/3.5}px`
+        canvas.style.height = `${viewport.height/3.5}px`
+        // canvas.style.width = `4[x]`
+    
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+        page.render(renderContext);
+    
+        window.addEventListener('resize', (e) => {
+            const renderContext2 = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+    
+            page.render({
+                canvasContext: ctx,
+                viewport: page.getViewport({ scale })
+            });
+        })
+    
+    }).catch(error => {
+        console.error("Error loading PDF:", error);
+    });
+}
+
 function DisplayAttachment(p) { // p = path
 
     if (p.slice(-3) == "mp4") { // file is video
@@ -150,47 +220,7 @@ function DisplayAttachment(p) { // p = path
             pdfViewer.classList.remove("hiddensection")
         }
 
-        pdfjsLib.getDocument(p).promise.then(pdf => {
-        
-            return pdf.getPage(1);
-        }).then(page => {
-            var canvas = pdfViewer
-            const ctx = canvas.getContext("2d");
-        
-            const scale = 2.15
-            const viewport = page.getViewport({ scale })
-        
-            const multiplier = 4
-        
-            canvas.width = viewport.width
-            canvas.height = viewport.height
-            // canvas.style.width = `${viewport.width/multiplier}px`
-            // canvas.style.height = `${viewport.height/multiplier}px`
-            canvas.style.width = `${viewport.width/3.5}px`
-            canvas.style.height = `${viewport.height/3.5}px`
-            // canvas.style.width = `4[x]`
-        
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
-            page.render(renderContext);
-        
-            window.addEventListener('resize', (e) => {
-                const renderContext2 = {
-                    canvasContext: ctx,
-                    viewport: viewport
-                };
-        
-                page.render({
-                    canvasContext: ctx,
-                    viewport: page.getViewport({ scale })
-                });
-            })
-        
-        }).catch(error => {
-            console.error("Error loading PDF:", error);
-        });
+        renderPDF()
     }
 }
 
@@ -307,8 +337,9 @@ export function updateSubmission(assignment_id) {
 
                     clearCardBorders() // clearing all borders
                     newCard.classList.add("solidborder") //setting border for clicked card\
-
+                    pdfpage = 1
                     DisplayAttachment("/Server/" + data[i].submission_data.file) // displaying card attachment/media
+                    
 
                     newCard.dataset.clicked = 1
                 }
@@ -455,8 +486,9 @@ function SetAssignmentPage(data, j) {
 
     // personalized description
     updateDesc(true, details.description, true, data[j].title)
-
+    pdfpage = 1
     DisplayAttachment("/Server/" + details.attachment)
+    
 }
 
 for (let i = 0; i < sections.length; i++) {
@@ -511,6 +543,31 @@ assignmentCard.addEventListener("click", (e) => {
     
     
 })
+
+
+
+// pdf buttons
+const forward = document.getElementById("forwardarrow")
+const backward = document.getElementById("backwardarrow")
+
+forward.addEventListener("click", (e) => {
+    if (pdfpage + 1 <= maxpages) {
+        pdfpage = pdfpage + 1
+        renderPDF()
+    }
+    
+})
+
+backward.addEventListener("click", (e) => {
+    if (pdfpage - 1 >= 1) {
+        pdfpage = pdfpage - 1
+        renderPDF()
+    }
+    
+   
+})
+
+
 
 function checker() {
     setTimeout(checker, 50)

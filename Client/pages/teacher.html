@@ -48,10 +48,6 @@
                     <img class="sectionimg" src="/Client/imgs/cap.png"/>
                     <p class="sectiontext">Students</p>
                 </div>
-                <div class="section" id="profilebtn">
-                    <img class="sectionimg profileimg" src="/Client/imgs/head.png"/>
-                    <p class="sectiontext profiletext">Profile<p>
-                </div>
             </div>
         </div>
         <div id="main">
@@ -92,10 +88,21 @@
                     <div id="general"></div>
                 </div>
             </div>
-            <div class="hiddensection fullsection" id="profile"></div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
                 <div id="assignmentbulk">
-                    <a id="assignmentdownloader" href="/Server/uploads/1740007705076.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+
+                    <div id="pdfcontainer">
+                        <div id="pdfbuttons">
+                            <div class="pdfbutton" id="backward">
+                                <p id="backwardarrow" class="arrow"><</p>
+                            </div>
+                            <div class="pdfbutton" id="forward">
+                                <p id="forwardarrow" class="arrow">></p>
+                            </div>
+                        </div>
+                        <a id="assignmentdownloader" href="/Server/uploads/starter pdf.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                    </div>
+                    
                     <div class="hiddensection videocontainer"><video id="my-video">
                     <source src="/Server/uploads/starter video.mp4" type="video/mp4" /></div>
                     
