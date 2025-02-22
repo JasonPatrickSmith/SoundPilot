@@ -153,11 +153,11 @@ const data = {
 //   labels: labels,
   datasets: [{
     data: [
-        { x: '2025-01-15T00:00:00', y: 10 },  // Plot point at a custom time
-        { x: '2025-02-15T00:00:00', y: 10 },  // Plot point at a custom time
-                { x: '2025-02-16T03:00:00', y: 20 },  // Another point at a different time
-                { x: '2025-02-17T00:00:00', y: 15 },  // Point at another specific time
-                { x: '2025-02-19T00:00:00', y: 25 }   // No data for Feb 18
+        { x: '2025-01-15T00:00:00', y: 10 },
+        { x: '2025-02-15T00:00:00', y: 10 }, 
+                { x: '2025-02-16T03:00:00', y: 20 }, 
+                { x: '2025-02-17T00:00:00', y: 15 }, 
+                { x: '2025-02-19T00:00:00', y: 25 }  
     ],
     fill: false,
     borderColor: 'rgb(0, 140, 255)',
@@ -173,14 +173,14 @@ const ctx = document.getElementById('chart');
     options: {
         plugins: {
             legend: {
-                display: false // Hides the legend (square at the top)
+                display: false 
             }
         },
         scales: {
             x: {
-                type: 'time', // Enables time-based axis
+                type: 'time',
                 time: {
-                    unit: 'day' // Change to 'hour', 'minute', 'month', etc.
+                    unit: 'day'
                 },
             },
             y: {

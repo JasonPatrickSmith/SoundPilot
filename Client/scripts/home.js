@@ -248,14 +248,14 @@ function updateVid() {
         var aspectRatio = vidWidth/vidHeight
     
         if (vidWidth > maxWidth || vidHeight > maxHeight) {
-            if (vidWidth / maxWidth > vidHeight / maxHeight) { // if width exceeds the limit more than height (relative to max)
-                vidWidth = maxWidth // width is the larger limiting factor
-                vidHeight = Math.round(maxWidth/aspectRatio) // apply aspect ratio to height
+            if (vidWidth / maxWidth > vidHeight / maxHeight) { 
+                vidWidth = maxWidth 
+                vidHeight = Math.round(maxWidth/aspectRatio)
                 console.log("width constraint")
             }
-            else { // height exceeds limit more than width
-                vidHeight = maxHeight // height is the larger limiting factor
-                vidWidth = Math.round(maxHeight*aspectRatio) // apply aspect ratio to width
+            else {
+                vidHeight = maxHeight 
+                vidWidth = Math.round(maxHeight*aspectRatio) 
                 console.log("height constraint")
             }
         }

@@ -65,16 +65,6 @@ function renderSingle(n, m = null) {
         }).addModifier(new Accidental(m))),
         new StaveNote({ keys: ["b/4"], duration: "qr" }),
         new StaveNote({ keys: ["b/4"], duration: "qr" }),
-    
-        // // A quarter-note D.
-        // new StaveNote({ keys: ["d/4"], duration: "q" }),
-    
-        // // A quarter-note rest. Note that the key (b/4) specifies the vertical
-        // // position of the rest.
-        // new StaveNote({ keys: ["b/4"], duration: "qr" }),
-    
-        // // A C-Major chord.
-        // new StaveNote({ keys: ["c/4", "e/4", "g/4"], duration: "q" }),
     ];
 
     voice.addTickables(notes)
