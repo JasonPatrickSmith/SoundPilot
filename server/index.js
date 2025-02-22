@@ -237,3 +237,23 @@ app.post('/deleteAssignment', (req, res) => {
         res.json(results)
     })
 })
+
+app.get("/noteidentifyingindepth", (req, res) => {
+    const id = req.query.id
+    const range = req.query.range
+
+    const query = `
+    SELECT * FROM note_identifying_sessions
+    WHERE user_id = ${id}
+    AND end_time >= NOW() - INTERVAL 1 ${range};
+    `
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query: ' + err.stack)
+            res.status(500).send('Error fetching assignments')
+            return;
+        }
+        res.json(results)
+    })
+})

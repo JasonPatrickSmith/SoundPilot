@@ -2,12 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/Client/styles/global.css"></link>
-        <link rel="stylesheet" href="/Client/styles/teacher.css"></link>
+        <link rel="stylesheet" href="../styles/global.css"></link>
+        <link rel="stylesheet" href="../styles/teacher.css"></link>
         <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
         <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     </head>
 
     <body>
@@ -27,7 +28,7 @@
                     </div>
                     <div id="right" class="half">
                         <div id="assignmentuploading">
-                            <img src="/Client/imgs/download.png" id="assignmentuploadingimg"/>
+                            <img src="../imgs/download.png" id="assignmentuploadingimg"/>
                         </div>
                     </div>
                     <input id="submit_button" type="submit"/>
@@ -41,12 +42,12 @@
                 <!-- <span >Strum</span><span class="thin">Pilot</span> -->
             </h1>
             <div id="expandbtn">
-                <img id="book" src="/Client/imgs/noteorange.png"></img>
+                <img id="book" src="../imgs/noteorange.png"></img>
             </div>
             <p id="menutag">MENU</p>
             <div id="infobar">
                 <div class="section clicked" id="assignmentsbtn">
-                    <img class="sectionimg" src="/Client/imgs/cap.png"/>
+                    <img class="sectionimg" src="../imgs/cap.png"/>
                     <p class="sectiontext">Students</p>
                 </div>
             </div>
@@ -81,13 +82,35 @@
                         </div>
                         <div class="noassignments">
                             <h1 class="notext">
-                                You Have No Assignments
+                                Student Has No Assignments
                             </h1>
                         </div>
                     </div>
                 </div>
                 <div id="stats">
-                    <div id="activity"></div>
+                    <div id="activity">
+                        <div id="ActivityFormContainer">
+                            <form id="activityForm">
+                                <select id="activitySelection" name="activity" class="customoption">
+                                    <option class="customoption" value="notes">Notes</option>
+                                </select>
+                                <select name="metric" id="metricSelection" class="customoption">
+                                    <option  class="customoption" value="time">Time</option>
+                                    <option class="customoption" value="accuracy">Accuracy</option>
+                                </select>
+                                <select name="range" id="rangeSelection" class="customoption">
+                                    <option class="customoption" value="day">Day</option>
+                                    <option class="customoption" value="week">Week</option>
+                                    <option class="customoption" value="month">Month</option>
+                                    <option class="customoption" value="year">Year</option>
+                                </select>
+                                <input type="submit" value="View" class="customoption"/>
+                            </form>
+                        </div>
+                        <div id="chartcontainer">
+                            <canvas id="chart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="hiddensection fullsection" id="assignment" data-id="">
@@ -102,15 +125,15 @@
                                 <p id="forwardarrow" class="arrow">></p>
                             </div>
                         </div>
-                        <a id="assignmentdownloader" href="/Server/uploads/starter pdf.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                        <a id="assignmentdownloader" href="http://3.13.118.113:3000/uploads?path=uploads/starter pdf.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
                     </div>
                     
                     <div class="hiddensection videocontainer"><video id="my-video">
-                    <source src="/Server/uploads/starter video.mp4" type="video/mp4" /></div>
+                    <source src="http://3.13.118.113:3000/uploads?path=uploads/starter video.mp4" type="video/mp4" /></div>
                     
                     <div id="infocontainer">
                         <div id="scrollbarborder">
-                            <img id="downloadingimg" src="/Client/imgs/download.png"/>
+                            <img id="downloadingimg" src="../imgs/download.png"/>
                             <div id="submissions">
                                 <div class="card" id="initialassignment" data-id="-1" data-listener="0" data-clicked="0">
                                     <div class="cardcontent">
@@ -133,7 +156,7 @@
                                             <p class="text">Submission</p>
                                         </div>
                                         <div class="submissiontitle">
-                                            Video.mp4
+                                            Submission
                                         </div>
                                         <div class="submissiondate">
                                             Submitted on Feb 14
@@ -162,10 +185,10 @@
         </div>
     </body>
 
-    <script type="module" src="/Client/scripts/home.js"></script>
-    <script type="module" src="/Client/scripts/FormManagement.js"></script>
-    <script type="module" src="/Client/scripts/NoteManagement.js"></script>
-    <script type="module" src="/Client/scripts/ChartManager.js"></script>
+    <script type="module" src="../scripts/home.js"></script>
+    <script type="module" src="../scripts/FormManagement.js"></script>
+    <script type="module" src="../scripts/NoteManagement.js"></script>
+    <script src="../scripts/ChartManager.js"></script>
     
     
 </html>

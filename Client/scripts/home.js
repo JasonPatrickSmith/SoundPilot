@@ -24,7 +24,7 @@ const num_to_date = {
 
 //checking for description module (teacher page)
 
-if (document.querySelector('script[src="/Client/scripts/NoteManagement.js"]')) {
+if (document.querySelector('script[src="../scripts/NoteManagement.js"]')) {
     import('./NoteManagement.js').then((m) => {
         descriptionmodule = m;
     })
@@ -144,6 +144,7 @@ var loadingdata = false
 let videoviewere = document.getElementById("my-video")
 let videocontainer = document.querySelector(".videocontainer")
 var pdfViewer = document.getElementById("pdfviewer");
+var pdfcontainer = document.getElementById("pdfcontainer")
 
 function renderPDF() {
 
@@ -189,7 +190,10 @@ function renderPDF() {
                 viewport: page.getViewport({ scale })
             });
         })
+        return page;
     
+    }).then(again => {
+        pdfcontainer.style.opacity = 1
     }).catch(error => {
         console.error("Error loading PDF:", error);
     });
@@ -213,13 +217,13 @@ function DisplayAttachment(p) { // p = path
             pdfViewer.classList.add("hiddensection")
         }
 
-        player.src({type: "video/mp4", src: `http://localhost:3000/uploads?path=${p}`})
+        player.src({type: "video/mp4", src: `http://3.13.118.113:3000/uploads?path=${p}`})
     }
     else if (p.slice(-3) == "pdf") { // file is pdf
         removeIfNew(pdfbuttons, "hiddensection")
-        
+        pdfcontainer.style.opacity = 0
 
-        assignmentDownloader.setAttribute("href", `http://localhost:3000/uploads?path=${p}`)
+        assignmentDownloader.setAttribute("href", `http://3.13.118.113:3000/uploads?path=${p}`)
 
         if (!videocontainer.classList.contains("hiddensection")) { // hiding video
             videocontainer.classList.add("hiddensection")
@@ -234,6 +238,7 @@ function DisplayAttachment(p) { // p = path
 }
 
 function updateVid() {
+
     var maxWidth = 800
         var maxHeight = 800
         var vidWidth = player.videoWidth();
@@ -324,7 +329,7 @@ export function updateSubmission(assignment_id) {
 
     deleteSubmissionCards() // clearing all extra submission cards except initial
 
-    fetch(`http://localhost:3000/submissions?id=${assignment_id}`).then(res => {
+    fetch(`http://3.13.118.113:3000/submissions?id=${assignment_id}`).then(res => {
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
@@ -387,7 +392,7 @@ export function updateSubmission(assignment_id) {
 }
 
 export function reloadAssignments() {
-    fetch(`http://localhost:3000/assignments?id=${student_id}`).then(res => {
+    fetch(`http://3.13.118.113:3000/assignments?id=${student_id}`).then(res => {
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
@@ -440,7 +445,7 @@ export function reloadAssignments() {
                             'id' : data[j].id
                         }
 
-                        fetch("http://localhost:3000/deleteAssignment", {
+                        fetch("http://3.13.118.113:3000/deleteAssignment", {
                             method: "POST",
                             headers: {
                                 'Content-Type': "application/json"
@@ -618,3 +623,8 @@ function checker() {
 }
 
 // checker()
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    reloadAssignments()
+ })

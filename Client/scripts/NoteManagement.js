@@ -1,4 +1,4 @@
-import { addIfNew, removeIfNew, updateDesc } from "/Client/scripts/home.js"
+import { addIfNew, removeIfNew, updateDesc } from "../scripts/home.js"
 
 var desc = document.getElementById("description")
 var descedit = document.getElementById("descriptionedit")
@@ -32,7 +32,7 @@ form.addEventListener("submit", (e) => {
         'submission_id' : currentsubmission
     })
 
-    fetch("http://localhost:3000/feedback", {
+    fetch("http://3.13.118.113:3000/feedback", {
         method: "POST",
         headers: {
             'Content-Type': "application/json"

@@ -1,9 +1,8 @@
-import { removeIfNew, addIfNew, getLastPairedSection, getCurrentSection, setLastPairedSection, setCurrentSection } from "/Client/scripts/home.js"
+import { removeIfNew, addIfNew, getLastPairedSection, getCurrentSection, setLastPairedSection, setCurrentSection } from "../scripts/home.js"
 
 const sections = document.getElementsByClassName("section") // all sections
 const mainPage = document.getElementById("practice")
 console.log(mainPage)
-
 const defaultUserId = 1
 const exercisesdiv = document.getElementById("exercises")
 const exercises = document.getElementsByClassName("exercise")
@@ -167,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         var totalwrong = 0
                         var totalright = 0
-                        fetch(`http://localhost:3000/noteidentifying?id=${defaultUserId}`).then(res => {
+                        fetch(`http://3.13.118.113:3000/noteidentifying?id=${defaultUserId}`).then(res => {
                             return res.json()
                         }).then(data => {
                             for (let i = 0; i < data.length; i++) {
@@ -175,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 totalright += data[i].correct_guesses
                             }
 
-                            const accuracy = Math.round(totalright/totalwrong*100)
+                            const accuracy = Math.round(totalright/(totalwrong + totalright)*100)
                             noteIdentifyingAccuracyE.textContent = accuracy.toString() + "%"
                             
                             const accuracyLevels = ['bad', 'mid', 'good']
@@ -226,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             console.log(details)
 
                             console.log("Class 'hidden' was added!");
-                            fetch("http://localhost:3000/noteidentifying", {
+                            fetch("http://3.13.118.113:3000/noteidentifying", {
                                 method: "POST",
                                 headers: {
                                     'Content-Type': "application/json"

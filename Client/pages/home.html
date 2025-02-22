@@ -3,9 +3,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/Client/styles/global.css"></link>
-        <link rel="stylesheet" href="/Client/styles/home.css"></link>
-        <link rel="stylesheet" href="/Client/styles/practice.css"></link>
+        <link rel="stylesheet" href="../styles/global.css"></link>
+        <link rel="stylesheet" href="../styles/home.css"></link>
+        <link rel="stylesheet" href="../styles/practice.css"></link>
         <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
         <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
@@ -23,16 +23,16 @@ https://cdn.jsdelivr.net/npm/vexflow@4.2.5/build/cjs/vexflow.min.js
                 <!-- <span >Strum</span><span class="thin">Pilot</span> -->
             </h1>
             <div id="expandbtn">
-                <img id="book" src="/Client/imgs/noteorange.png"></img>
+                <img id="book" src="../imgs/noteorange.png"></img>
             </div>
             <p id="menutag">MENU</p>
             <div id="infobar">
                 <div class="section clicked" id="assignmentsbtn">
-                    <img class="sectionimg" src="/Client/imgs/assignments.png"/>
+                    <img class="sectionimg" src="../imgs/assignments.png"/>
                     <p class="sectiontext">Assignments</p>
                 </div>
                 <div class="section" id="practicebtn">
-                    <img class="sectionimg practiceimg" src="/Client/imgs/scope.png"/>
+                    <img class="sectionimg practiceimg" src="../imgs/scope.png"/>
                     <p class="sectiontext practicetext">Practice<p>
                 </div>
             </div>
@@ -74,7 +74,7 @@ https://cdn.jsdelivr.net/npm/vexflow@4.2.5/build/cjs/vexflow.min.js
                     <div id="exercises">
                         <div data-assignment_type="" class="exercise" id="noteidentifying" data-page="noteidentifyingpage" >
                             <div class="imagecontainer">
-                                <img class="practiceimage" src="/Client/imgs/simplenote.png" id="simplenoteimg">
+                                <img class="practiceimage" src="../imgs/simplenote.png" id="simplenoteimg">
                             </div>
                             <div class="info">
                                 <text class="heading">Note Identification</text>
@@ -99,14 +99,14 @@ https://cdn.jsdelivr.net/npm/vexflow@4.2.5/build/cjs/vexflow.min.js
                                 <p id="forwardarrow" class="arrow">></p>
                             </div>
                         </div>
-                        <a id="assignmentdownloader" href="/Server/uploads/starter pdf.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
+                        <a id="assignmentdownloader" href="http://3.13.118.113:3000/uploads?path=uploads/starter pdf.pdf" download="Assignment"><canvas class="hiddensection" id="pdfviewer"></canvas></a>
                     </div>
                     <div class="hiddensection videocontainer"><video id="my-video">
-                    <source src="/Server/uploads/starter video.mp4" type="video/mp4" /></div>
+                    <source src="http://3.13.118.113:3000/uploads?path=uploads/starter video.mp4" type="video/mp4" /></div>
                     
                     <div id="infocontainer">
                         <div id="scrollbarborder">
-                            <img id="downloadingimg" src="/Client/imgs/download.png"/>
+                            <img id="downloadingimg" src="../imgs/download.png"/>
                             <div id="submissions">
                                 <div class="card" id="initialassignment" data-id="-1" data-listener="0" data-clicked="0">
                                     <div class="cardcontent">
@@ -184,8 +184,8 @@ https://cdn.jsdelivr.net/npm/vexflow@4.2.5/build/cjs/vexflow.min.js
         </div>
     </body>
 
-    <script type="module" src="/Client/scripts/home.js"></script>
-    <script type="module" src="/Client/scripts/HandleSubmissions.js"></script>
-    <script type="module" src="/Client/scripts/MusicPractice.js"></script>
+    <script type="module" src="../scripts/home.js"></script>
+    <script type="module" src="../scripts/HandleSubmissions.js"></script>
+    <script type="module" src="../scripts/MusicPractice.js"></script>
     
 </html>

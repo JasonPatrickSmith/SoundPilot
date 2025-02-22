@@ -11,7 +11,7 @@ var downloadingimg = document.getElementById("assignmentuploadingimg")
 
 function resetForm() {
     currentFile = null
-    downloadingimg.src = "/Client/imgs/download.png"
+    downloadingimg.src = "../imgs/download.png"
 }
 
 PieceButton.addEventListener("click", (e) => {
@@ -38,7 +38,7 @@ uploading.addEventListener('drop', (e) => {
 
             currentFile = file
             
-            downloadingimg.src = "/Client/imgs/file_downloaded.png"
+            downloadingimg.src = "../imgs/file_downloaded.png"
 
             // setTimeout(resetForm, 1000)
 
@@ -88,7 +88,7 @@ Form.addEventListener("submit", (e) => {
 
     encompass.classList.add("hiddensection")
 
-    fetch("http://localhost:3000/assign", {
+    fetch("http://3.13.118.113:3000/assign", {
         method: "POST",
         body: formData
     }).then(response => response.json())

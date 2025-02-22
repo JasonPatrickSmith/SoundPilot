@@ -1,4 +1,4 @@
-import { updateSubmission } from '/Client/scripts/home.js'
+import { updateSubmission } from '../scripts/home.js'
 
 let assignmentPage = document.getElementById("assignment")
 const zone = document.getElementById("scrollbarborder")
@@ -52,7 +52,7 @@ zone.addEventListener('drop', (e) => {
         
         try {
             e.preventDefault()
-            fetch("http://localhost:3000/submission", {
+            fetch("http://3.13.118.113:3000/submission", {
                 method: "POST",
                 body: form,
             }).then(response => response.json())
